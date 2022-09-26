@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/quest/solve-quest.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="/js/script.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script defer>
+	$(document).on('click', "input[type='radio']", function() {
+		thisRadio = $(this);
+		if (thisRadio.hasClass('imChecked')) {
+			thisRadio.removeClass('imChecked');
+			thisRadio.prop('checked', false);
+		} else {
+			thisRadio.prop('checked', true);
+			thisRadio.addClass('imChecked');
+		}
+	});
+</script>
+<script type="text/javascript">
+	var test;
+	var questList;
+
+	$(document).ready(function(){
+		var no = $('#roundNo').val();
+
+		  $.ajax({
+		        url:'/quest/select',
+		        type:'post',
+		        data:{roundNo:no},
+		        success:function(data){	
+		          $('#questCount').html(data.length); 
+
+		          if(data.length > 0){
+ 		          document.getElementById("noQuestContent").style.display = "none"; 
+
+
+		          $.ajax({
+		            url:'/quest',
+		            type:'post',
+		            data:{param:JSON.stringify(data)},
+		            success:function(data){	
+		              $('#questList').html(data);
+		            }
+		          })
+		        } else {
+			          document.getElementById("questContent").style.display = "none"; 
+		            document.getElementById("noQuestContent").style.display = "flex"; 
+		          }  
+		        }
+		})
+
+		$.ajax({
+			url:'/test/selectByRound',
+			type:'post',			
+			data:{roundNo:no},
+			success:function(data){
+				test = data;
+				$('#testName').html(data.testName);
+			}
+		})
+	})
+
+	function quest(no, ans){
+		this.questNo = no;
+		this.answer = ans;
+	}
+
+	function changeTextColor(object, color){
+		object.parents('.quest').find('.questContent')
+			.css('backgroundColor', color);
+	}
+  
+	function check(){
+		var answer = [];
+		var name;
+		var no;
+		var ans;
+		var ol = $('.questChoices');
+
+		for(var o of ol){
+			no = $(o).attr('value');			
+			name = 'choice' + no;			
+			ans = $('input[name=' + name + ']:checked').val();
+			answer.push(new quest(no, ans));
+		}
+
+		//alert(JSON.stringify(answer));
+
+		$.ajax({
+			url:'/quest/check',
+			type:'post',
+			data:{param:JSON.stringify(answer)},
+			success:function(data){
+				changeTextColor(ol, '#ff7051');				
+				for(var d of data){					
+					var o = $('.questChoices[value=' + d + ']');
+
+					changeTextColor(o,'white');	
+				}
+				window.scrollTo({ top: 0, behavior: "smooth" });  
+			}
+		})
+	}
+</script>
+</head>
+<body>
+	<!-- header -->
+	<!-- <div th:replace="layout/header2 :: main"></div> -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<input type="hidden" id="roundNo" th:value="${round.roundNo}"
+		name="roundNo">
+	<input type="hidden" id="roundName" th:value="${round.roundName}"
+		name="roundName">
+	<!-- 	<button th:if="${session.user?.userId == round.regUser}" type="submit">문제등록</button>
+ -->
+	<div id="test__info">
+		<div id="testDetails">
+			<h1 id="testName">시험 이름</h1>
+			<div class="details__title">
+				<h2 th:text="${round.roundName}">회차 이름</h2>
+				<p>총</p>
+				<p id="questCount"></p>
+				<p>문제</p>
+			</div>
+		</div>
+		<form action="/insertQuest" method="post">
+			<input type="hidden" id="roundNo" th:value="${round.roundNo}"
+				name="roundNo"> <input type="hidden" id="roundName"
+				th:value="${round.roundName}" name="roundName">
+			<button th:if="${session.user != null}" type="submit">문제 등록</button>
+		</form>
+	</div>
+
+ 	<div id="navbar__divider"></div>
+
+	<div id="questContent">
+		<!-- 문제 목록 출력 -->
+		<div id="questList"></div>
+
+		<div id="navbar__divider"></div>
+
+		<div class="checking">
+			<button type="button" onclick="check()" id="checkingBtn">채점하기</button>
+		</div>
+	</div>
+
+	<div id="noQuestContent">
+		<img src="/imgs/etc/sorry.svg" />
+		<div class="describe">
+			<h1>Oops!</h1>
+			<h2>아직 올라온 문제가 없습니다</h2>
+			<h3>직접 문제를 등록하시려면, 로그인 후 문제 등록 버튼을 눌러주세요!</h3>
+		</div>
+	</div>
+
+	<!-- footer -->
+	<div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>

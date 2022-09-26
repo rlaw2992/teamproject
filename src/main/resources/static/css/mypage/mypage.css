@@ -1,0 +1,173 @@
+/* user profile */
+#mypage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 0 30px 0 30px;
+}
+
+#mypage > .mypage__profile {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1160px;
+
+  padding: 28px 0;
+}	
+
+#mypage > .mypage__profile img {
+  width: 80px;
+}
+
+#mypage > .mypage__profile > .mypage__profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+
+  height: 100%;
+
+  padding: 24px 0 24px 24px;
+}
+
+#mypage
+  > .mypage__profile
+  > .mypage__profile-info
+  > .usernameAndsetting__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: auto;
+}
+
+#mypage
+  > .mypage__profile
+  > .mypage__profile-info
+  > .usernameAndsetting__wrapper
+  h1 {
+  font-size: var(--font-great);
+
+  margin-right: 5px;
+}
+
+#mypage
+  > .mypage__profile
+  > .mypage__profile-info
+  > .usernameAndsetting__wrapper
+  img {
+  width: var(--font-great);
+}
+
+#mypage > .mypage__profile > .mypage__profile-info p {
+  font-size: var(--font-small);
+
+  color: var(--color-dark-grey);
+}
+
+#mypage > .mypage__profile > .mypage__profile-info > .badge {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#mypage > .mypage__profile > .mypage__profile-info > .badge img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+
+  padding-top: 16px;
+  margin-right: 4px;
+}
+
+#mypage > .mypage__profile > .mypage__profile-info > .badge p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-bottom: 4px;
+
+  font-size: var(--font-small);
+  font-weight: 400;
+  font-family: 'SF Pro Text';
+
+  color: var(--color-black);
+}
+
+/* user activity */
+#mypage > .mypage__list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  position: relative;
+
+  width: 100%;
+  max-width: 1160px;
+}
+
+#mypage > .mypage__list > p {
+  position: relative;
+  margin: 0 48px 0 0;
+
+  font-size: var(--font-great);
+  font-weight: 500;
+
+  color: var(--color-dark-grey);
+
+  cursor: pointer;
+}
+
+#mypage > .mypage__list p:hover {
+  font-weight: 600;
+}
+
+#mypage > .mypage__list .active {
+  font-weight: 600;
+
+  color: var(--color-black);
+}
+
+#mypage > .mypage__list .active:hover {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+#mypage > .mypage__list .marker {
+  position: absolute;
+  left: 0;
+
+  width: 0;
+  height: 2px;
+
+  background: var(--color-red);
+  bottom: -8px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+ 
+#replace-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1160px;
+
+  padding: 30px 0 100px 0;
+}
+
+/* Responsible Web */
+@media screen and (max-width: 1270px) {
+  #mypage {
+    padding: 0 50px;
+  }
+}

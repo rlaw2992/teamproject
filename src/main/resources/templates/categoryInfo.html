@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+	<script type="text/javascript">/* 
+	$(document).ready(function(){
+		$(document).ready(function(){
+			$.ajax({
+				url:'/category/list',
+				type:'post',
+				success:function(data){
+					var categoryList = $('#categoryList');
+					
+					for(let d of data){
+						$.ajax({
+							url:'/category', 
+							type:'post',
+							data:d,
+							success:function(data){
+								$('.sub-category').append(data);
+							}
+						});
+					}
+				},
+				error:function(){
+					alert('카테고리 목록 불러오기 실패');
+				}
+			})
+		});	
+	})	 */
+	</script>
+</head>
+<body>	
+	<li class="category" tab-index="0">
+		<input type="hidden" id='categoryNo' th:value="${category.categoryNo}">
+		<a th:text="${category.categoryName}" th:href="${'/category/' + category.categoryNo}" >카테고리 이름</a>
+		<ul class="sub-category">			
+			<li th:each="test:${testList}"><a th:href="${'/test/' + test.testNo}" th:text="${test.testName}">시험 이름</a></li>
+		</ul>
+	</li>
+</body>
+</html>

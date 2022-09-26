@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<img src="/imgs/boardList-icons/newQuest.svg" class="icon" />
+	<h1>신규 회차</h1>
+	<ul>
+		<li th:each="round:${rankList}">
+			<a th:href="${'/round/' + round.roundNo}" th:text="${round.roundName}">회차 이름
+			<i class="fa-solid fa-chevron-right"></i>
+		</a>
+		</li>
+		<!-- <li><a href="">Su국가기술자격시<i
+				class="fa-solid fa-chevron-right"></i></a></li>
+		<li><a href="">It IT·전산 IT·전산 e<i
+				class="fa-solid fa-chevron-right"></i></a></li>
+		<li><a href="">Su국가기술자asd격시<i
+				class="fa-solid fa-chevron-right"></i></a></li>
+		<li><a href="">가나아러 지<i class="fa-solid fa-chevron-right"></i></a>
+		</li> -->
+	</ul>
+</body>
+</html>

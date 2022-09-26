@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>my-level</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <style> 
+    .icon { 
+      width: 70px;
+
+      padding: 0 0 0 9px;
+
+      transition: var(--transition-default);
+    }
+
+    .icon:hover {
+      transform: scale(0.8);
+    }
+
+    #ranked__title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 40px 0 80px 0;
+
+      font-weight: 700;
+      text-transform: capitalize;
+      font-family: 'SF Pro Text';
+      color: var(--color-black);
+    }
+
+    #level__standard {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 100%;
+    }
+
+    #level__standard .bars li {
+      display: table-cell;
+
+      position: relative;
+
+      width: 180px;
+      height: 200px;
+    }
+
+    #level__standard .bars li:nth-child(1) .bar {
+      background-color: var(--color-yellow);
+    }
+
+    #level__standard .bars li:nth-child(2) .bar {
+      background-color: var(--color-pink);
+    }
+
+    #level__standard .bars li:nth-child(3) .bar {
+      background-color: var(--color-orange);
+    }
+
+    #level__standard .bars li:nth-child(4) .bar {
+      background-color: var(--color-green);
+    }
+
+    #level__standard > .bars .bar {
+      display: block;
+      width: 20px;
+
+      position: absolute;
+      bottom: 0;
+
+      margin-left: 32px;
+
+      text-align: center;
+
+      border-radius: 32px;
+
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
+      transition: 0.5s;
+      transition-property: background, box-shadow;
+    }
+
+    /* #level__standard .bars .bar:hover {
+    } */
+
+    #level__standard .bars .bar:before {
+      content: attr(id);
+
+      position: relative;
+      bottom: 44px;
+
+      font-size: var(--font-medium);
+      font-weight: 600;
+      font-family: 'SF Pro Text';
+
+      color: var(--color-black);
+    }
+
+    #level__standard .bars > li:last-child .bar:before {
+      font-weight: 700;
+
+      color: var(--color-pink);
+    }
+
+    #level__badges {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding-top: 36px;
+    }
+
+    #level__badges > .badge {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      width: 180px;
+
+      font-weight: 500;
+      font-size: var(--font-medium);
+    }
+
+    #level__badges .badge p {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 80px;
+
+      color: var(--color-black);
+    }
+
+    #level__badges > .badge:last-child p {
+      font-weight: 600;
+    }
+
+    #level__badges > .badge:last-child img:hover {
+      transition: var(--transition-default);
+    }
+
+    .badges__description {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      width: 100%;
+    }
+
+    .badges__description p {
+      font-size: var(--font-small);
+      font-family: source-han-sans-korean;
+
+      padding: 28px 330px 0 0;
+    }
+
+    @media screen and (max-width: 1260px) {
+      .badges__description p {
+        padding: 28px 0 0 0;
+      }
+    }
+  </style>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+    integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script defer>
+    $(function () {
+      $('.bars li .bar').each(function (key, bar) {
+        var percentage = $(this).data('percentage');
+        $(this).animate(
+          {
+            height: percentage + '%',
+          },
+          1000
+        );
+      });
+    });
+  </script>
+  <body>
+    <h1 id="ranked__title">clever ranked</h1>
+    <!-- bars -->
+    <div id="level__standard">
+      <ul class="bars">
+        <li>
+          <div class="bar" id="10" data-percentage="3"></div>
+        </li>
+        <li>
+          <div class="bar" id="50" data-percentage="17"></div>
+        </li>
+        <li>
+          <div class="bar" id="100" data-percentage="34"></div>
+        </li>
+        <li>
+          <div class="bar" id="300" data-percentage="100"></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- badge description -->
+    <div id="level__badges">
+      <div class="badge">
+        <img src="imgs/badge/new.svg" class="icon" alt="level 1" />
+        <p>Newbie</p>
+      </div>
+      <div class="badge">
+        <img src="imgs/badge/level1.svg" class="icon" alt="level 1" />
+        <p>Level 1</p>
+      </div>
+      <div class="badge">
+        <img src="imgs/badge/level2.svg" class="icon" alt="level 1" />
+        <p>Level 2</p>
+      </div>
+      <div class="badge">
+        <img src="imgs/badge/master.svg" class="icon" alt="level 1" />
+        <p>MASTER</p>
+      </div>
+    </div>
+    <div class="badges__description">
+      <p>*레벨에 따른 배지는 정답 처리 된 문제의 개수 기준입니다.</p>
+    </div>
+  </body>
+</html>

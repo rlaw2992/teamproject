@@ -1,0 +1,24 @@
+<!-- 레벨 -->
+<div th:fragment="level" id="profile__badge">
+	<a href="/mypage"> <img th:if="${info.userExp} >= 300" src="/imgs/badge/master.svg" />
+		<img th:if="${info.userExp} >= 100" src="/imgs/badge/level2.svg" />
+		<img th:if="${info.userExp} >= 50" src="/imgs/badge/level1.svg" />
+		<img th:if="${info.userExp} >= 0" src="/imgs/badge/new.svg" />
+	</a>
+</div>
+
+<!-- 프로필 -->
+<div th:fragment="profile" id="profile">
+	<div th:with="info = ${session.user}" onclick="profileOnclick()" class="profileBtn" id="profile__info">
+		<img id="profile__img" th:src="${'/imgs/profile/user/' + session.user.userId + '.png'}" />
+		<p th:text="${info.userNickname}" id="profile__name"></p>
+	</div>
+	<div id="profileDropdown" class="profile-dropdown">
+		<ul>
+			<li><a href="/mypage">프로필</a></li>
+			<li><a href="/mypage/setting">설정</a></li>
+			<li><div class="divider"></div></li>
+			<li><a href="/logout">로그아웃</a></li>
+		</ul>
+	</div>
+</div>

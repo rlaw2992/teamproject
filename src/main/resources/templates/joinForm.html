@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/login.css" />
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/util.js"></script><script src="/js/script.js"></script>
+
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<script th:inline="javascript">
+	window.history.forward();
+
+	function noBack() {
+		window.history.forward();
+	}
+
+	$(document).ready(
+			function() {
+				let randomNum = Math.floor(Math.random() * 10);
+				$('#random__img').attr('src',
+						'/imgs/slidebar/illustration-' + randomNum + '.svg');
+
+				$('#submitBtn').click(function(data) {
+					var id = $('#userId').val();
+					var pwd = $('#userPwd').val();
+					var name = $('#userNickname').val();
+					var email = $('#userEmail').val();
+
+					go = true;
+
+					if (isEmpty(id))
+						label('#idmsg', '아이디를 입력해주세요.');
+					else if (id != $('#id2').val())
+						label('#idmsg', '아이디 확인이 필요합니다');
+
+					if (isEmpty(name))
+						label('#namemsg', '닉네임을 입력해주세요');
+					else if (name != $('#name2').val())
+						label('#namemsg', '닉네임 확인이 필요합니다');
+
+					if (isEmpty(pwd))
+						label('#pwdmsg', '비밀번호를 입력해주세요.');
+					else if (pwd != $('#pwd2').val())
+						label('#pwdmsg', '비밀번호가 일치하지 않습니다');
+
+					if (isEmpty(email))
+						label('#mailmsg', '이메일을 입력해주세요.');
+					else if (email != $('#email2').val())
+						label('#mailmsg', '이메일 확인이 필요합니다');
+
+					if (go) {
+						$('#encodePwd').val(encode(pwd));
+					}
+
+					return go;
+				});
+
+				$('#idchkbut').click(function(data) {
+					var id = $('#userId').val();
+
+					log(isEmpty(id))
+					if (isEmpty(id))
+						return;
+					$.ajax({
+						url : '/user/checkId',
+						data : {
+							userId : id
+						},
+						type : 'post',
+						success : function(data) {
+							if (data) {
+								$('#id2').val(id);
+								label('#idmsg', '사용 가능한 아이디', '#23a094');
+							} else {
+								label('#idmsg', '사용 불가능한 아이디');
+							}
+						},
+						fail : function() {
+							alert('실패');
+						}
+					})
+				});
+
+				$('#namechkbut').click(function(data) {
+					var name = $('#userNickname').val();
+
+					if (name == "")
+						return;
+					$.ajax({
+						url : '/user/checkName',
+						data : {
+							userNickname : name
+						},
+						type : 'post',
+						success : function(data) {
+							if (data) {
+								$('#name2').val(name);
+								label('#namemsg', '사용 가능한 닉네임', '#23a094');
+							} else {
+								label('#namemsg', '사용 불가능한 닉네임');
+							}
+						},
+						fail : function() {
+							alert('실패');
+						}
+					})
+				});
+
+				$('#emailchkbut').click(function(data) {
+					var email = $('#userEmail').val();
+
+					if (email == "")
+						return;
+					$.ajax({
+						url : '/user/checkEmail',
+						data : {
+							userEmail : email
+						},
+						type : 'post',
+						success : function(data) {
+							if (data) {
+								$('#email2').val(email);
+								label('#mailmsg', '사용 가능한 이메일', '#23a094');
+							} else {
+								label('#mailmsg', '사용 불가능한 이메일');
+							}
+						},
+						fail : function() {
+							alert('실패');
+						}
+					})
+				});
+			});
+</script>
+</head>
+<body onload="noBack();" onpageshow="if(event.persisted) noBack();"
+	onunload="">
+	<!-- 회원가입 폼 -->
+	<div class="form">
+		<a href="/"><h1>Clever</h1></a>
+		<h2>회원가입</h2>
+
+		<!-- 회원 정보 입력 -->
+		<form action="/user/join" method="post">
+			<!-- 아이디는 중복 불가, 확인 필요 -->
+			<label for="userId">아이디</label>
+			<div class="inputAndCheckBtnWrapper">
+				<input placeholder="아이디를 입력해주세요" class="joinInput" name="userId"
+					id="userId" type="text" required />
+				<button type="button" id="idchkbut" class="joinCheckBtn">
+					아이디 확인</button>
+			</div>
+			<input type="hidden" id="id2" value="" />
+			<!-- 아이디 메세지 출력 -->
+			<label id="idmsg"> </label>
+
+			<!-- 닉네임 중복 불가, 확인 필요 -->
+			<label for="userNickname">닉네임</label>
+			<div class="inputAndCheckBtnWrapper">
+				<input type="text" id="userNickname" class="joinInput"
+					placeholder="닉네임을 입력해주세요" name="userNickname" required />
+				<button type="button" id="namechkbut" class="joinCheckBtn">
+					닉네임 확인</button>
+			</div>
+			<input type="hidden" id="name2" value="" />
+			<!-- 닉네임 메세지 출력 -->
+			<label id="namemsg"> </label>
+
+			<!-- 이메일 중복 불가, 확인 필요 -->
+			<label for="userNickname">이메일</label>
+			<div class="inputAndCheckBtnWrapper">
+				<input type="email" id="userEmail" class="joinInput"
+					placeholder="이메일을 입력해주세요" name="userEmail" required />
+				<button type="button" id="emailchkbut" class="joinCheckBtn">
+					이메일 확인</button>
+			</div>
+			<input type="hidden" id="email2" value="" />
+			<!-- 이메일 메세지 출력 -->
+			<label id="mailmsg"> </label>
+
+			<!-- 비밀번호 -->
+			<label for="userPwd">비밀번호</label>
+			<div class="pwdWrapper">
+				<input type="hidden" id="encodePwd" name="userPwd" /> <input
+					placeholder="비밀번호를 입력해주세요" class="joinInput" type="password"
+					id="userPwd" required /> <input type="password" id="pwd2"
+					class="joinInput" placeholder="비밀번호를 확인해주세요" />
+				<!-- 비밀번호 메세지 출력 -->
+			</div>
+			<label id="pwdmsg"> </label>
+
+			<button id="submitBtn" type="submit">회원가입</button>
+		</form>
+
+		<div id="goLogin">
+			<p>이미 계정이 있으신가요?</p>
+			<a href="/login">로그인</a>
+		</div>
+	</div>
+
+	<div id="formImg">
+		<img id="random__img" />
+	</div>
+</body>
+</html>

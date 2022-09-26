@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/quest/questForm.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="/js/script.js"></script>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<style type="text/css">
+hr {
+	width: 100%;
+}
+</style>
+</head>
+<script type="text/javascript">
+	window.history.forward();
+
+	function noBack() {
+		window.history.forward();
+	}
+</script>
+<body>
+	<!-- header -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<div id="newQuestUpload">
+		<h1>신규 문제 등록</h1>
+		<div id="navbar__divider"></div>
+		<div id="warning__info">모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에
+			공개되어 있는 문제만 모아서 보여드립니다.</div>
+
+		<form action="/quest/insertQuest" method="post" id="insertQuest">
+			<input type="hidden" name="roundNo" th:value="${round.roundNo}" /> <label
+				for="roundName">시험 회차</label> <input name="roundName"
+				th:value="${round.roundName}" readonly /> <label for="questSeq">문제
+				번호 <span>*</span>
+			</label>  <input type="number"
+				min="1" name="questSeq" required /> <label for="questContent">문제
+				내용 <span>*</span>
+			</label>
+			<textarea id="questContent" name="questContent"
+				placeholder="문제를 입력해주세요." required></textarea>
+			<label for="c1">선지 1 <span>*</span></label> <input
+				placeholder="1번 내용을 입력해주세요." type="text" name="c1" required /> <label
+				for="c2">선지 2 <span>*</span></label> <input
+				placeholder="2번 내용을 입력해주세요." type="text" name="c2" required /> <label
+				for="c3">선지 3</label> <input placeholder="3번 내용을 입력해주세요."
+				type="text" name="c3" /> <label for="c4">선지 4</label> <input
+				placeholder="4번 내용을 입력해주세요." type="text" name="c4" /> <label
+				for="c5">선지 5</label> <input placeholder="5번 내용을 입력해주세요."
+				type="text" name="c5" /> <label for="answer">정답 <span>*</span></label>
+			<input placeholder="내용을 입력해주세요." type="text" name="answer" required />
+			<div class="buttonWrapper">
+				<button type="submit" id="submitBtn">등록</button>
+			</div>
+		</form>
+	</div>
+
+	<!-- footer -->
+	<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>

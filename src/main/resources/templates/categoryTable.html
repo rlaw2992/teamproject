@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+</head>
+<body>
+	<table>
+		<tr>
+			<td class="category" th:each="category:${categoryList}" th:text="${category.categoryName}" th:value="${category.categoryNo}" onclick="select(this);">
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

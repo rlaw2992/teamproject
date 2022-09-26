@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/base.css}" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="/js/script.js"></script>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<style type="text/css">
+body {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+} 
+
+.btn {
+  padding-left: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+  margin-left:4px;
+
+  border: 0px;
+  border-radius: 1px;
+
+  font-size: var(--font-medium);
+  line-height: 24px;
+  letter-spacing: -0.015em;
+
+  color: var(--color-white);
+  background-color: rgb(61, 61, 61);
+}
+
+.btn:hover {
+  color: #8c8c8c;
+}
+
+.btn:active {
+  background-color: var(--color-black);
+}
+
+.deleteBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+
+  border: 0px;
+  border-radius: 1px;
+
+  font-size: var(--font-medium);
+  line-height: 24px;
+  letter-spacing: -0.015em;
+
+  color: var(--color-white);
+  background-color: var(--color-red);
+}
+
+.deleteBtn:hover {
+  color: #ff9b9b;
+}
+
+.deleteBtn:active {
+  background-color: #e36448;
+}
+
+hr{
+  width: 100%;
+}
+
+#adminPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 1160px;
+
+  cursor: default;
+  color: var(--color-black);
+}
+
+#adminPage > .adminPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1160px;
+}
+
+#adminPage h1 {
+  padding: 32px 0 ;
+
+  font-weight: 500;
+  font-size: var(--font-giant);
+}
+
+#adminPage > #replace {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+   }
+
+
+table {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  padding-top: 24px;
+}
+
+thead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  
+  padding-bottom: 20px;
+}
+
+tbody {
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+}
+
+tr {  
+  width: 100%;
+
+}
+
+tr,
+th,
+td {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+}
+
+td {
+padding-bottom: 8px;
+}
+
+@media screen and (max-width: 1270px) {
+  #adminPage {
+    padding: 0 50px;
+  }
+}
+</style>
+<script src="/js/script.js"></script>
+<script src="https://kit.fontawesome.com/267f657aa0.js"
+   crossorigin="anonymous"></script>
+<script>
+   $(document).ready(function() {
+
+      $('form').submit(function(e) {
+         e.preventDefault();
+         var keyword = $('#keyword').val();
+         //alert(keyword);
+         $.ajax({
+            url : "/manageUser/search-user/" + keyword,
+            type : "POST",
+            success : function(data) {
+               $('#replace').html(data);
+               //location.href = '/user/authority';
+            },
+            error : function() {
+               //alert('검색실패')
+
+            }
+         });
+      });
+   });
+
+   // manager, user 권한 부여
+   function addAndRemoveManagerBtn(action, id, name) {
+      if (action == "add") {
+         var check = confirm(name + '에게 매니저 권한을 부여하겠습니까?');
+      } else if (action == "remove") {
+         var check = confirm("'" + name + "' 을 일반 회원으로 변경하시겠습니까?");
+      }
+
+      if (check == true) {
+         $.ajax({
+            url : "/manageUser/" + action + "-manager/" + id,
+            type : "PUT",
+            dataType : 'text', // String 값을 return하기 때문
+            success : function(message) {
+               alert(message + '"' + name + '".');
+               alert('성공 !');
+               location.href = '/authority';
+            },
+            error : function() {
+               alert(" 성공 !");
+               location.href = '/authority';
+            }
+         })
+      }
+   };
+
+   // user 영구 삭제 
+   function deleteUserBtn(id, name) {
+      //alert('deleteUserBtn') 
+      var check1 = confirm('삭제하시겠습니까?');
+      if (check1 == true) {
+         var check2 = confirm("삭제시 복구가 불가합니다" + name + "삭제하시겠습니까?");
+      }
+
+      if (check2 == true) {
+         $.ajax({
+            url : "/manageUser/delete-user/" + id,
+            type : "POST",
+            dataType : 'text', // String 값을 return하기 때문
+            success : function(message) {
+               //alert(message);
+               //location.replace('/manageUser');
+               location.href = '/authority';
+            },
+            error : function() {
+               alert('유저 삭제실패');
+               //location.replace('/manageUser');
+            }
+         })
+      }
+   };
+   
+   function search(){
+      alert($('#keyword').val());
+      $.ajax({
+         url:'/search/user',
+         type:'post',
+         data:$('#keyword').val()
+      })
+   }
+</script>
+
+</head>
+<body>
+   <div th:replace="layout/header :: header"></div>
+   <hr>
+
+   <div id="adminPage">
+      <div class="adminPage__header">
+         <h1>관리자페이지</h1>
+
+         <form class="searchUser">
+            <!-- search user content -->
+            <div class="searchUserInput">
+               <input placeholder="검색" id="keyword" maxlength="255" />
+               <button type="submit" id="userSearchBtn" class="btn">검색</button>
+            </div>
+         </form>
+      </div>
+ 
+ <div id="replace">
+      <table>
+         <thead>
+            <tr>
+               <th scope="col">아이디</th>
+               <th scope="col">닉네임</th>
+               <th scope="col">권한</th>
+               <th scope="col">레벨</th>
+               <th>-</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+            <div id="navbar__divider"></div>
+            </tr>
+            <tr th:each="list:${checkAll}">
+               <td th:text="${list.userId}"></td>
+               <td th:text="${list.userNickname}"></td>
+               <td th:text="${list.userRole}"></td>
+               <td th:text="${list.userExp}"></td>
+               <td>
+                  <button th:if="${#strings.equals(list.userRole, 'USER')}"
+                     th:onclick="addAndRemoveManagerBtn('add', [[${list.userId}]], [[${list.userNickname}]])"
+                     class="btn">매니저 등록</button>
+
+                  <button th:if="${#strings.equals(list.userRole, 'MANAGER')}"
+                     th:onclick="addAndRemoveManagerBtn('remove', [[${list.userId}]], [[${list.userNickname}]])"
+                     class="btn">매니저 삭제</button>
+
+                  <button th:if="not ${#strings.equals(list.userRole, 'ADMIN')}"
+                     th:onclick="deleteUserBtn([[${list.userId}]], [[${list.userNickname}]])"
+                     class="deleteBtn btn">회원 정지</button>
+               </td>
+            </tr>
+         </tbody>
+      </table></div>
+   </div>
+</body>
+</html>

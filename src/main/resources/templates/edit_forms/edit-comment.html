@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.commentEdit #content {
+  width: 100%;
+  height: 250px;
+
+  padding: 12px;
+
+  color: var(--color-black);
+
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 1px;
+
+  font-size: var(--font-medium);
+  font-weight: 500;
+
+  resize: none;
+}
+
+.commentEdit #content::placeholder {
+  font-size: var(--font-medium);
+  font-weight: 500;
+
+  color: #c7c7c7;
+}
+
+#content:focus {
+  border: 1px solid var(--color-black);
+}
+
+#content::selection {
+  background-color: var(--color-light-grey);
+}
+</style>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript">
+	function updateReplyDoneBtn(id) {
+		var boardName = $('#board_name').val();
+		//alert($('#content').val());
+		var input = confirm('댓글을 수정하시겠습니까?');
+
+		if (input == true) {
+			$.ajax({
+				url : "/edit-reply2/" + id,
+				type : "PUT",
+				//contentType: "application/json",
+				data : {
+					content : $('#content').val()
+				},
+				success : function() {
+					alert('댓글이 수정되었습니다');
+					location.href = '';
+				},
+				error : function() {
+					alert('실패');
+					/* location.replace('/' + boardName + '/article?no='
+						+ $('#article_idx').val()); */
+				}
+			});
+		}
+	}
+
+	$('form').submit(function(e) {
+		e.preventDefault();
+	})
+</script>
+</head>
+
+<body>
+	<form class="commentEdit">
+		<div th:each="reply : ${reply}">
+			<!-- 댓글 내용 출력 -->
+			<textarea th:text="${reply.content}" id="content" required></textarea>
+		</div>
+		<!-- update + delete button -->
+		<div>
+			<!-- 버튼 함수에 댓글 id값을 함께 넘겨서 ajax에서 해당하는 댓글의 아이디를 받을 수 있도록 함 -->
+			<button th:onclick="updateReplyDoneBtn([[${reply.replyNo}]])">수정</button>
+			<input type="reset" value="초기화" />
+		</div>
+	</form>
+</body>
+
+</html>

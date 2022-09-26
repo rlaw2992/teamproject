@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="login">
+	<div id="user-profile">
+		<!-- 레벨 -->
+		<div id="profile__badge">
+			<img src="imgs/badge/level 3(master).png" alt="badge" />
+		</div>
+		<!-- 프로필 -->
+		<div id="profile">
+			<div onclick="profileOnclick()" class="profileBtn"
+				id="profile__info">
+				<!-- <img id="profile__img" src="imgs/profile/illustration-12.png" /> -->
+				<p id="profile__name" th:text="${session.user?.userNickname}">닉네임</p>
+			</div>
+			<div id="profileDropdown" class="profile-dropdown">
+				<ul>
+					<li><a href="/mypage">프로필</a></li>
+					<li><a href="/mypage-setting">설정</a></li>
+					<li><div class="divider"></div></li>
+					<li><a href="/logout">로그아웃</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- 최고 관리자에게만 보임 -->
+	<form th:if="${session.user?.userRole.toString() == 'ADMIN'}" action="category/manage"  method="post" id="admin">
+		<input type="submit" value="카테고리 관리">
+	</form>
+</div>
+<div th:fragment="notLogin">	
+	<a href="/login" id="login">로그인</a>
+	<a href="/join" id="join">회원가입</a>
+</div>
+</html>

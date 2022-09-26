@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/category/categoryList.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<style type="text/css">
+body {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#roundForm > form input {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  min-width: 70px;
+  height: 100%;
+  max-height: 44px;
+
+  padding: 11px 12px;
+  margin: 0px;
+
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 1px;
+
+  font-size: var(--font-medium);
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.015em;
+
+  color: rgb(13, 13, 13);
+  background: rgb(255, 255, 255);
+}
+
+#roundForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 1160px;
+
+  cursor: default;
+  color: var(--color-black);
+}
+
+#roundForm > form input::placeholder {
+  font-size: var(--font-medium);
+  font-weight: 500;
+
+  color: #c7c7c7;
+}
+
+#roundForm > form input:focus {
+  border: 1px solid var(--color-black);
+}
+
+#roundForm > form input::selection {
+  background-color: var(--color-light-grey);
+}
+
+#roundForm > form input:read-only {
+  font-weight: 600;
+
+  color: #acaaaa;
+  background-color: var(--color-light-grey);
+}
+
+#roundForm > form input:read-only:focus {
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 1px;
+}
+
+#submitBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+  margin-top: 24px;
+
+  border: 0px;
+  border-radius: 1px;
+
+  font-weight: 500;
+  font-size: var(--font-xlarge);
+  line-height: 27px;
+
+  color: var(--color-white);
+  background-color: var(--color-red);
+}
+
+#submitBtn:hover {
+  font-weight: 600;
+}
+
+#submitBtn:active {
+  background-color: #e36448;
+}
+
+/* Form Upload  */
+#roundForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 1160px;
+
+  color: var(--color-black);
+}
+
+#roundForm > h1 {
+  padding: 22px 0 18px 0;
+
+  font-size: var(--font-giant);
+  font-weight: 500;
+}
+
+#roundForm > form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+  padding: 0;
+}
+
+#roundForm > form  label {
+  padding: 18px 0;
+
+  font-size: var(--font-xlarge);
+  font-weight: 400;
+}
+
+#roundForm > form  label span {
+  color: var(--color-red);
+}
+
+#roundForm > form > .buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  width: 100%;
+
+  margin: 80px 0;
+}
+
+#roundForm > form > .buttonWrapper button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0;
+}
+
+@media screen and (max-width: 1270px) {
+  #roundForm {
+    padding: 0 50px;
+  }
+}
+</style>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/util.js"></script>
+<script type="text/javascript"> 
+	</script>
+</head>
+<body>
+	<!-- header -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<div id="roundForm">
+		<h1>신규 회차 등록  </h1>
+		<div id="navbar__divider"></div>
+
+		<form action="/round/insert" method="post">
+			<label for="testNo"></label> <input type="hidden" name="testNo"
+				th:value="${test.testNo}" /> <label for="regUser">등록인</label> <input
+				name="regUser" th:value="${session.user.userNickname}" readonly />
+
+			<label for="testName">시험 이름 </label> <input name="testName"
+				th:value="${test.testName}" readonly /> <label for="roundName">시험
+				회차 <span>*</span>
+			</label> <input name="roundName" type="text" placeholder="ex) XXXX년 X회차"
+				required /> <label for="testDate">시험 일자 <span>*</span></label>
+			<input name="testDate" type="text" placeholder="ex) 20220901"
+				required />
+
+			<div class="buttonWrapper">
+				<button onclick="register();" id="submitBtn" type="submit">
+					등록</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

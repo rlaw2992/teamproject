@@ -1,0 +1,208 @@
+/* Clash Display - logo */
+@import url('http://fonts.cdnfonts.com/css/clash-display');
+
+/* SF Pro */
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 300;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Light.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Regular.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Medium.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 700;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Bold.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 900;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Heavy.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 100;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Ultralight.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 200;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Thin.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 300;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Light.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Regular.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Medium.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 700;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Bold.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 800;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Black.ttf');
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 900;
+  src: url('https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProDisplay-Heavy.ttf');
+}
+
+/* Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+:root {
+  /* Color */
+  --color-white: #ffffff;
+  --color-black: #282828;
+  --color-ivory: #f4f4f0;
+  --color-light-grey: #f3f3f3;
+  --color-dark-grey: #6d6d6d;
+  --color-red: #ff7051;
+  --color-dark-red: #98282a;
+  --color-yellow: #f1f333;
+  --color-orange: #ffc900;
+  --color-pink: #ff90e8;
+  --color-green: #23a094;
+  --color-light-green: #daf8f2;
+  --color-blue: #90a8ed;
+
+  /* Size */
+  --side-padding: 12px;
+  --icon-size: 32px;
+  --search-icon-size: 22px;
+  --avatar-size: 32px;
+
+  /* Font Size */
+  --font-giant: 32px;
+  --font-big: 24px;
+  --font-great: 18px;
+  --font-xlarge: 16px;
+  --font-large: 18px;
+  --font-medium: 14px;
+  --font-small: 12px;
+  --font-micro: 10px;
+
+  /* Transition */
+  --transition-default: all ease 1s;
+  --transform-default: rotate(-10deg);
+}
+
+* {
+  margin: 0%;
+  padding: 0%;
+
+  box-sizing: border-box;
+
+  word-break: keep-all;
+
+  font-family: 'SF Pro Text', source-han-sans-korean, 'Noto Sans KR';
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+::selection {
+  color: var(--color-black);
+  background-color: var(--color-yellow);
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  background-color: white;
+}
+
+input, textarea {
+  border: none;
+  outline: none;
+
+  font-weight: 400;
+
+  font-family: 'SF Pro Text', 'Noto Sans KR';
+
+  color: var(--color-black);
+  caret-color: var(--color-red);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-black);
+}
+
+li {
+  list-style: none;
+}
+
+hr {
+  height: 0;
+  
+  border: 0; 
+  box-shadow: 0 0 1px 1px var(--color-light-grey);
+}
+
+#navbar__divider {
+  width: 100%;
+  height: 0.01rem;
+
+  margin-top: 8px;
+
+  background-color: #e5e5e5;
+}

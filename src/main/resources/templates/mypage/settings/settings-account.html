@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head> 
+    <title>settings profile</title>
+    <style>
+      #settings__userInfo > ul > li:nth-child(3) {
+        padding-bottom: 26px;
+      }
+
+      #settings__userInfo > ul > li:last-child .settingsBtn:hover {
+        background-color: var(--color-light-grey);
+      }
+
+      #settings__userInfo > ul > li > h3 {
+        font-size: 16px;
+        font-weight: 600;
+
+        color: var(--color-black);
+      }
+
+      #settings__userInfo > ul > li:nth-child(3) h3 {
+        padding-bottom: 0;
+
+        font-size: 16px;
+        font-weight: 600;
+
+        color: var(--color-black);
+      }
+
+      #settings__userInfo > ul > li:nth-child(3) > .edit__info p {
+        margin: 18px 0 12px 0;
+
+        font-size: var(--font-medium);
+        font-weight: 400;
+      }
+
+      #settings__userInfo > ul > li:nth-child(3) > .edit__info p:nth-child(5) {
+        margin-top: 30px;
+      }
+
+      #settings__userInfo > ul > li:nth-child(3) > .edit__info input {
+        font-size: var(--font-small);
+        font-weight: 400;
+      }
+
+      #settings__userInfo
+        > ul
+        > li:nth-child(3)
+        > .edit__info
+        input:nth-child(6) {
+        margin: 8px 0 12px 0; 
+      }
+
+      #settings__userInfo > ul > li:nth-child(3) > .edit__info > .pwd__helper {
+        display: inline-flex;
+
+        width: 100%;
+
+        margin: 12px 0 0 0;
+
+        word-break: keep-all;
+      }
+
+      #settings__userInfo
+        > ul
+        > li:nth-child(3)
+        > .edit__info
+        > .pwd__helper
+        p {
+        margin: 0 3px 0 0;
+
+        font-size: var(--font-small);
+        font-weight: 400;
+        color: var(--color-dark-grey);
+      }
+
+      #settings__userInfo
+        > ul
+        > li:nth-child(3)
+        > .edit__info
+        > .pwd__helper
+        a {
+        font-size: var(--font-small);
+        font-weight: 400;
+        color: var(--color-blue);
+
+        text-decoration-line: underline;
+      }
+    </style>
+    <script src="/js/util.js"></script>
+    <script defer>
+      // 취소 버튼 클릭 시 html 복구(ajax 출력 이전으로)
+      var originalEmailHtml = $('#replace-edit-email').html();
+      var originalPwdHtml = $('#replace-edit-pwd').html();
+
+      function changeInfoBtn(info) {
+        $.ajax({
+          url: '/settings-account/' + info,
+          type: 'POST',
+          success: function (data) {
+            $('#replace-edit-' + info).html(data);
+          },
+        });
+      } 
+		
+      // 변경 사항 컨트롤러를 통해 실제 업데이트하는 메소드
+      function updateEmailBtn() {
+       var input = confirm('이메일을 변경하시겠습니까?');
+       if (input == true) {
+         $.ajax({
+           url: '/edit-email',
+           type: 'POST',
+           data: {
+             userId: $('#userId').val(),
+             userEmail: $('#userEmail').val(),
+           },
+           dataType: 'text',
+           success: function (message) {
+             alert(message);
+             location.replace('/mypage/setting');
+           },
+         });
+       }
+     }
+      
+   // 변경 사항 컨트롤러를 통해 실제 업데이트하는 메소드
+      function updatePwdBtn() {
+      var userId = $('#userId').val();
+      var userPwd = $('#userPwd').val();
+      var input = confirm('비밀번호를 변경하시겠습니까?');
+	   $.ajax({
+		   url : '/user/checkPassword',
+		   type : 'post',
+		   data : {
+			   userId : userId,
+			   userPwd : encode(userPwd)
+		   },
+		   success :function(data){
+			   if(!data){
+				   alert('현재 비밀번호가 일치하지 않습니다.')
+			}
+			   else {
+				   if($('#userPwd2').val() != ''){
+					   if($('#userPwd2').val() != $('#userPwd3').val()){
+						   alert('새 비밀번호가 일치하지 않습니다.');
+					   }
+					   else {
+						userPwd =$('#userPwd2').val();
+						$.ajax({
+							   url: '/edit-pwd',
+		    		           type: 'POST',
+		    		           data: {
+		    		             userId: userId,
+		    		             userPwd: encode($('#userPwd2').val()),
+		    		           },
+		    		           dataType : 'text',
+		    		           success : function(message){
+		    		        	   alert(message);
+		    		        	   location.replace('/mypage/setting');
+		    		        	   },
+						   })
+					   }
+				}
+					
+				   }
+		   }
+	   });
+   }
+	   
+	   
+	   
+
+      
+      // 취소 버튼 클릭 시 html 복구(ajax 출력 이전으로)
+      function cancelEmailBtn() {
+        $('#replace-edit-email').html(originalEmailHtml);
+      }
+
+      function cancelPwdBtn() {
+        $('#replace-edit-pwd').html(originalPwdHtml);
+      }
+    </script>
+  </head>
+  <body>
+    <section th:with="info = ${session.user}" id="settings__userInfo">
+      <ul>
+        <li id="replace-edit-email">
+          <div class="edit__info">
+            <h3>이메일</h3>
+            <p th:text="${info.userEmail}"></p>
+          </div>
+          <button onclick="changeInfoBtn('email')" class="settingsBtn btn">
+            변경
+          </button>
+        </li>
+        <li><div id="divider"></div></li>
+        <li th:with="info = ${session.user}" id="replace-edit-pwd">
+          <h3 class="edit__info">비밀번호</h3>
+          <button onclick="changeInfoBtn('pwd')" class="settingsBtn btn">변경</button>
+        </li>
+        <li><div id="divider"></div></li>
+        <li>
+          <div class="edit__info">
+            <h3>회원탈퇴</h3>
+          </div>
+          <form action="/settings-account/leave" method="post">
+            <button type="submit" class="settingsBtn btn">탈퇴</button>
+          </form>
+        </li>
+      </ul>
+      <hr />
+    </section>
+  </body>
+</html>

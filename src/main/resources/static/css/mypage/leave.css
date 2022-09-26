@@ -1,0 +1,131 @@
+#deleteAccount {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+}
+
+#deleteAccount > #deleteAccount__title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1160px;
+
+  padding: 48px 0 18px 0;
+
+  font-size: var(--font-giant);
+  font-weight: 300;
+  color: var(--color-black);
+}
+
+#deleteAccount > #navbar__divider {
+  width: 100%;
+  height: 0.01rem;
+
+  margin-top: 8px;
+
+  background-color: #e5e5e5;
+}
+
+#deleteAccount > .leave__warning {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 1160px;
+
+  padding: 40px 0 100px 0;
+}
+
+#deleteAccount > .leave__warning > .warning__title {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  width: 50%;
+  min-width: 290px;
+  height: 100%;
+}
+
+#deleteAccount > .leave__warning > .warning__title h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+#deleteAccount > .leave__warning > .warning__title img {
+  width: 100px;
+}
+
+#deleteAccount > .leave__warning > .warning__description {
+  width: 100%;
+
+  color: var(--color-black);
+}
+
+#deleteAccount > .leave__warning > .warning__description > h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-black);
+
+  padding-bottom: 20px;
+}
+
+#deleteAccount > .leave__warning > .warning__description > ul {
+  padding: 0 0 30px 10px;
+}
+
+#deleteAccount > .leave__warning > .warning__description > ul > li {
+  font-size: var(--font-xlarge);
+  font-weight: 400;
+  color: var(--color-dark-grey);
+}
+
+#deleteAccount > .leave__warning > .warning__description .warning-check {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  height: 100%;
+
+  padding-bottom: 34px;
+}
+
+#deleteAccount
+  > .leave__warning
+  > .warning__description
+  > .warning-check
+  input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+
+  accent-color: #f26343;
+}
+
+#deleteAccount
+  > .leave__warning
+  > .warning__description
+  > .warning-check
+  label {
+  padding: 0 0 2px 10px;
+
+  font-size: var(--font-medium);
+  color: var(--color-black);
+}
+
+#deleteAccount > .leave__warning > .warning__description > .leave {
+  padding-top: 38px;
+}
+
+/* Respongsible Web */
+@media screen and (max-width: 1270px) {
+  #deleteAccount {
+    padding: 0 50px;
+  }
+}

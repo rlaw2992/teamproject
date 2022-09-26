@@ -1,0 +1,90 @@
+<!-- header -->
+<header>
+<script src="/js/script.js"></script>
+	<script>
+		function profileOnclick() {
+			document.getElementById('profileDropdown').classList.toggle('show');
+			window.onclick = function(event) {
+				if (!event.target.matches('#profileDropdown')) {
+					if (openDropdown.classList.contains('show')) {
+						document.getElementById('profileDropdown').classList
+								.remove('show');
+					}
+				}
+				;
+				var dropdowns = document
+						.getElementsByClassName('profile-dropdown');
+				var i;
+				for (i = 0; i < dropdowns.length; i++) {
+					var openDropdown = dropdowns[i];
+					if (openDropdown.classList.contains('show')) {
+					}
+				}
+			}
+		}
+	</script>
+	<div id="header__top">
+		<!-- 로고 영역 -->
+		<div th:replace="layout/header :: logo"></div>
+		<div id="header__actions">
+			<!-- 검색 영역 -->
+			<div th:replace="layout/header :: search"></div>
+
+			<!-- 유저 상태에 따름 -->
+			<div id="header__actions-user">
+				<!-- 로그인 안된 경우 버튼 -->
+				<div th:replace="layout/header:: notLogin"></div>
+
+				<!-- 로그인 한 경우 버튼 -->
+				<div th:replace="layout/header:: login"></div>
+			</div>
+		</div>
+	</div>
+	<!-- navbar -->
+	<div th:replace="/layout/categoryList :: list"></div>
+</header>
+
+<!-- 로고 -->
+<a th:fragment="logo" href="/">
+	<h1 id="header__logo">clever</h1>
+</a>
+
+<!-- 검색 영역 -->
+<form th:fragment="search" action="/search" id="header__actions-search"
+	class="search_area" name="searhform" method="get">
+	<select id="where" name="where" title="검색 범위 선택" hidden=""></select> <input
+		id="query" name="query" type="text" title="검색어 입력" maxlength="255"
+		class="input_text" tabindex="1" accesskey="s"
+		style="ime-mode: active;" placeholder="검색어를 입력해주세요." />
+	<button id="search_btn" class="search-btn" type="submit" title="검색">
+		<img src="/imgs/header/search.png" alt="search" />
+	</button>
+	<script type="text/javascript">	
+		//검색 조건 불러오기
+		$.ajax({
+			url:'/search/conditionList',
+			type:'post',
+			success:function(data){				
+				let where = $('#where');
+								
+				for(var d of data){
+					$(where).append(d);
+				}				
+				$(where).children()[0].selected = true;
+			}
+		})
+	</script>
+</form>
+
+<!-- 비로그인 시 출력 -->
+<a th:fragment="notLogin" th:if="${session?.user == null}" href="/login"
+	id="loginAndRegister"> 로그인/회원가입 </a>
+
+<!-- 로그인 시 출력 -->
+<div th:fragment="login" th:if="${session?.user != null}"
+	th:with="info = ${session.user}" id="user-profile">
+	<!-- 레벨 -->
+	<div th:replace="layout/profile:: level"></div>
+	<!-- 프로필 -->
+	<div th:replace="layout/profile:: profile"></div>
+</div>

@@ -1,0 +1,440 @@
+body {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;  
+} 
+ 
+hr {
+  width: 100%;
+  height: 0;
+  
+  border: 0; 
+  box-shadow: 0 0 1px 1px var(--color-light-grey);
+} 
+ 
+.short-answer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  min-width: 100px;
+  height: 100%;
+  max-height: 44px;
+
+  padding: 11px 12px;
+  margin: 0px;
+
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 1px;
+
+  font-size: var(--font-medium);
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.015em;
+
+  color: rgb(13, 13, 13);
+  background: rgb(255, 255, 255);
+}
+
+.short-answer::placeholder {
+  font-weight: normal;
+  font-size: var(--font-medium);
+  color: rgb(164, 164, 164);
+}
+
+.short-answer:focus {
+  border: 1px solid var(--color-black);
+}
+
+.short-answer::selection {
+  background-color: var(--color-light-grey);
+}  
+
+.questDetailsBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  float: right;
+
+  height: 40px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+  margin: 18px 0 24px 0;
+
+  border: 1px solid var(--color-black);
+  border-radius: 1px;
+
+  font-weight: 500;
+  font-size: var(--font-xlarge);
+  line-height: 27px;
+  letter-spacing: -0.02em;
+
+  color: var(--color-black);
+}
+
+.questDetailsBtn:hover {
+  background-color: var(--color-light-grey);
+}
+
+.questDetailsBtn:active {
+  background-color: #e1e1e1;
+}
+
+#checkingBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+  margin-top: 48px;
+
+  border: 0px;
+  border-radius: 1px;
+
+  font-weight: 400;
+  font-size: var(--font-large);
+  line-height: 27px;
+  letter-spacing: -0.02em;
+
+  color: var(--color-white);
+  background-color: var(--color-red);
+}
+
+#checkingBtn:hover {
+  font-weight: 500;
+  
+  color: #ff9b9b; 
+}
+
+#checkingBtn:active {
+  background-color: #e36448;
+} 
+  
+
+#test__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  width: 100%;
+  max-width: 1160px;
+} 
+  
+#test__info > form > button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  float: right;
+
+  height: 40px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+  margin-top: 8px;
+
+  border: 1px solid var(--color-black);
+  border-radius: 1px;
+
+  font-weight: 500;
+  font-size: var(--font-xlarge);
+  line-height: 27px;
+  letter-spacing: -0.02em;
+
+  color: var(--color-black);
+}
+
+#test__info > form > button:hover {
+  background-color: var(--color-light-grey);
+}
+
+#test__info > form > button:active {
+  background-color: #e1e1e1;
+}
+ 
+#testDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%; 
+
+  padding: 18px 0 15px 0;
+
+  color: var(--color-black);
+}
+
+#testDetails h1 {
+  font-size: var(--font-large);
+}
+
+#testDetails > .details__title {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#testDetails > .details__title h2 {
+  margin-right: 12px;
+}
+
+#testDetails > .details__title p {
+  margin-top: 8px;
+}
+
+#testDetails > .details__title p:nth-child(2) {
+  padding-right: 3px;
+}
+
+#testDetails > .details__title p:nth-child(3) {
+  margin-top: 11px;
+}
+
+#testDetails > .details__title h1 {
+  font-size: var(--font-great);
+  font-weight: 500;
+}
+
+#testDetails > .details__title h2 {
+  font-size: var(--font-big);
+  font-weight: 500;
+  color: #b7b7b7;
+}
+
+#testDetails p {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+#questList {
+  width: 100%;
+  max-width: 1160px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  flex-wrap: wrap;
+
+  padding: 48px 0 20px 0; 
+
+  background: none;
+
+  word-break: break-all;
+
+  cursor: default;
+}
+
+#questList > .quest {
+  width: 500px;
+  max-width: 580px;
+  height: auto;
+
+  margin-bottom: 150px;
+
+  background: none;
+}
+
+#questList > .quest > .questNumAndQuestContent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding-bottom: 12px;
+}
+
+#questList > .quest > .questNumAndQuestContent > .questInfo > .questNum {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -1px;
+
+  color: var(--color-red);
+}
+
+#questList > .quest > .questNumAndQuestContent > .questInfo > .questContent {
+  padding-left: 2px;
+
+  font-size: 20px;
+  font-weight: 400;
+}
+ 
+#questList > .quest > .questChoices ol {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: baseline;
+
+  list-style: none;
+  counter-reset: item;
+
+  counter-reset: circle 0;
+}
+
+#questList > .quest > .questChoices > ol li {
+  position: relative;
+}
+
+#questList > .quest > .questChoices > ol li::before {
+  position: absolute;
+  top: 50%;
+  left: 0.4em;
+  transform: translateY(-50%);
+  counter-increment: circle 1;
+  content: counter(circle);
+  font-size: 0.8em;
+  text-align: center;
+}
+
+#questList > .quest > .questChoices > ol li::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: inline-block;
+  border: 1px solid var(--color-black);
+  border-radius: 100%;
+  width: 1em;
+  height: 1em;
+}
+
+#questList > .quest > .questChoices > ol > li label {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding-left: 8px;
+
+  font-weight: 400;
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+#questList > .quest > .questChoices > ol > li label:hover {
+  font-weight: 500;
+}
+
+#questList > .quest > .questChoices > ol > li > label .choice {
+  display: block;
+
+  content: counter(item);
+
+  width: 17px;
+  height: 17px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  margin: 0.2rem 10px 4px -0.5rem;
+
+  border-color: var(--color-black);
+  border-radius: 100%;
+
+  appearance: none;
+  background: none;
+}
+
+#questList > .quest > .questChoices > ol > li > label .choice:focus {
+  outline: none;
+}
+
+#questList > .quest > .questChoices > ol > li > label .choice:checked {
+  background-color: #d3d3d3;
+}
+
+.checking {
+  display: inline-flex;
+  justify-content: flex-end;
+
+  width: 100%;
+  max-width: 1160px;
+
+  margin-bottom: 150px; 
+
+  font-size: var(--font-big);
+  font-weight: 500;
+} 
+
+#noQuestContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1160px;
+
+  padding: 180px;
+
+  background: none;
+
+  color: var(--color-black);
+}
+
+#noQuestContent img {
+  padding-right: 58px;
+
+  transition: var(--transition-default);
+}
+
+#noQuestContent img:hover {
+  transform: scale(0.8);
+}
+
+#noQuestContent .describe {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#noQuestContent > .describe h1 {
+  font-family: 'Clash Display';
+  font-size: 60px;
+  font-weight: 600;
+
+  padding-bottom: 48px;
+}
+
+#noQuestContent > .describe h2 {
+  font-size: var(--font-big);
+  font-weight: 600;
+  
+  padding-bottom: 12px;
+}
+
+#noQuestContent > .describe h3 {
+  font-size: var(--font-xlarge);
+  font-weight: 500;
+}
+
+
+
+/* Responsible Web */
+@media screen and (max-width: 1270px) {
+  #questList {
+    padding: 0 50px;
+  }
+
+  #testDetails {
+    padding: 18px 50px 10px 50px;
+  }
+
+  #noQuestContent {
+    padding: 100px 50px;
+  }
+}

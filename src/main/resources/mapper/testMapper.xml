@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dip.clever.mapper.TestMapper">
+	<!-- 카테고리의 시험 목록 불러오기 -->
+	<select id="selectTestList" parameterType="int" resultMap="test">
+		SELECT		*
+		FROM		TB_TEST
+		WHERE		CATEGORY_NO = #{categoryNo}
+		AND			USE_F = 'Y'
+		ORDER BY	TEST_NAME	DESC
+	</select>
+	
+	<!-- 해당 번호의 시험 정보 불러오기 -->
+	<select id="selectTest" parameterType="int" resultMap="test">
+		SELECT		*
+		FROM		TB_TEST
+		WHERE		TEST_NO = #{testNo}
+		AND			USE_F = 'Y'
+	</select>	
+	
+	<select id="selectTestByRound" parameterType="int" resultMap="test">
+		SELECT		*
+		FROM		TB_TEST
+		WHERE		TEST_NO = (
+			SELECT		TEST_NO
+			FROM		TB_ROUND
+			WHERE		ROUND_NO = #{round_no}
+		)		
+	</select>
+	
+	<!-- 검색 결과 반환 -->
+	<select id="getResultList" parameterType="map" resultType="java.util.HashMap">
+		SELECT		${searchCondition}_NO, ${searchCondition}_NAME
+		FROM		TB_${searchCondition}
+		WHERE		${searchCondition}_NAME LIKE '%${query}%'
+		AND			USE_F = 'Y'
+	</select>	
+	
+	<select id="selectTestRank" resultMap="test">
+		SELECT		T2.TEST_NO, 
+					T2.TEST_NAME
+		FROM		(
+			SELECT		TARGET_ID
+			FROM		tb_log
+			WHERE		ACTION = 'READ'
+			AND			REG_TIME > DATE_ADD(SYSDATE(), INTERVAL -7 DAY)
+			GROUP BY	USER_ID, TARGET_ID
+			)						AS T1
+		INNER JOIN		TB_TEST		AS T2
+			ON							T2.TEST_NO = T1.TARGET_ID
+		GROUP BY TARGET_ID
+		ORDER BY COUNT(*)	DESC
+		LIMIT	5
+	</select>
+	
+	<!-- 시험 매핑 -->
+	<resultMap type="dip.clever.model.Test" id="test" >
+		<result property="testNo" 	column="TEST_NO"/>
+		<result property="categoryNo" column="CATEGORY_NO"/>		
+		<result property="managerId" column="MANAGER_ID"/>		
+		<result property="testName" column="TEST_NAME"/>
+	</resultMap>
+	
+	<!-- 밑에 부분은 사용하지 않음 -->
+	<insert id="insertArticle" parameterType="map">
+		INSERT INTO TB_ARTICLE
+		VALUES	(NULL, #{boardId}, #{userId}, #{title}, SYSDATE(), SYSDATE(), #{content}, 'Y')
+	</insert>
+	
+<!-- 	<select id="findByArticleLike" parameterType="java.util.HashMap" resultMap="articleInfo">
+		SELECT		T1.NO,
+					T1.TITLE	,
+					T2.NAME		AS USER_NAME,
+					T1.CRE_DATE	,
+					T1.MOD_DATE
+		FROM		TB_ARTICLE	AS T1
+		LEFT JOIN	TB_USER		AS T2
+			ON			T1.USER_ID = T2.ID
+		INNER JOIN	TB_BOARD	AS T3
+			ON			T1.BOARD_ID = T3.ID
+			AND			T3.USE_F = 'Y'
+		WHERE		TITLE LIKE '%${title}%'
+		AND			T1.USE_F = 'Y'
+	</select> -->
+	
+	<select id="searchCount" parameterType="String" resultType="int">
+		SELECT		COUNT(*)
+		FROM		TB_ARTICLE
+		WHERE		TITLE LIKE '%${query}%'
+	</select>
+	
+	<select id="selectId" resultType="int">
+		SELECT		LAST_INSERT_ID()
+		FROM		TB_ARTICLE
+		LIMIT		1
+	</select>
+	
+	<select id="checkUser" parameterType="int" resultType="String">
+		SELECT		USER_ID
+		FROM		TB_ARTICLE
+		WHERE		NO = ${no}
+	</select>
+	
+	<update id="updateArticle" parameterType="map">
+		UPDATE	TB_ARTICLE
+		SET		TITLE = #{title},
+				CONTENT = #{content},
+				MOD_DATE = SYSDATE()
+		WHERE	NO = #{no}
+	</update>
+	
+	<update id="deleteArticle" parameterType="int">
+		UPDATE	TB_ARTICLE
+		SET		USE_F = 'N'
+		WHERE	NO = #{no}
+	</update>	
+	
+<!-- 	<resultMap type="info.thecoding.model.Article" id="article" >
+		<result property="boardId" 	column="BOARD_ID"/>
+		<result property="boardName"	column="BOARD_NAME"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="userId"	column="USER_ID"/>
+		<result property="title"	column="TITLE"/>
+		<result property="creDate"	column="CRE_DATE"/>
+		<result property="modDate"	column="MOD_DATE"/>
+		<result property="content"	column="CONTENT"/>
+		<result property="readCnt"	column="READ_CNT"/>
+	</resultMap> -->
+</mapper>

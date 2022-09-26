@@ -1,0 +1,107 @@
+
+<script>
+   $(document).ready(function() {
+      $('form').submit(function(e) {
+         e.preventDefault();
+         var keyword = $('#keyword').val();
+         //alert(keyword);
+         $.ajax({
+            url : "/user/manageUser/search-user/" + keyword,
+            type : "POST",
+            success : function(data) {
+               $('table').html(data);
+               //location.href = '/user/authority';
+            },
+            error : function() {
+               //alert('검색실패')
+
+            }
+         });
+      });
+   });
+
+   // manager, user 권한 부여
+   function addAndRemoveManagerBtn(action, id, name) {
+      if (action == "add") {
+         var check = confirm(name + '에게 권한을 부여하겠습니까?');
+      } else if (action == "remove") {
+         var check = confirm(name + "'를 매니저로 올리겠습니까?");
+      }
+
+      if (check == true) {
+         $.ajax({
+            url : "/user/manageUser/" + action + "-manager/" + id,
+            type : "PUT",
+            dataType : 'text', // String 값을 return하기 때문
+            success : function(message) {
+               alert(message + '"' + name + '" 성공 !');
+               location.href = '/user/authority';
+            },
+            error : function() {
+               //alert('실패');
+            }
+         })
+      }
+   };
+
+   // user 영구 삭제 
+   function deleteUserBtn(id, name) {
+      //alert('deleteUserBtn') 
+      var check1 = confirm('삭제하시겠습니까?');
+      if (check1 == true) {
+         var check2 = confirm("삭제시 복구가 불가합니다" + name + "삭제하시겠습니까?");
+      }
+
+      if (check2 == true) {
+         $.ajax({
+            url : "/user/manageUser/delete-user/" + id,
+            type : "POST",
+            dataType : 'text', // String 값을 return하기 때문
+            success : function(message) {
+               //alert(message);
+               //location.replace('/manageUser');
+               location.href = '/user/authority';
+            },
+            error : function() {
+               //alert('유저삭제실패');
+               //location.replace('/manageUser');
+            }
+         })
+      }
+   };
+</script>
+<table>
+   <thead>
+      <tr>
+         <th scope="col">아이디</th>
+         <th scope="col">닉네임</th>
+         <th scope="col">권한</th>
+         <th scope="col">레벨</th>
+         <th>-</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <div id="navbar__divider"></div>
+      </tr>
+      <tr th:each="list:${userList}">
+         <td th:text="${list.userId}"></td>
+         <td th:text="${list.userNickname}"></td>
+         <td th:text="${list.userRole}"></td>
+         <td th:text="${list.userExp}"></td>
+         <td>
+            <button th:if="${#strings.equals(list.userRole, 'USER')}"
+               th:onclick="addAndRemoveManagerBtn('add', [[${list.userId}]], [[${list.userNickname}]])"
+               class=" btn">매니저 등록</button>
+
+            <button th:if="${#strings.equals(list.userRole, 'MANAGER')}"
+               th:onclick="addAndRemoveManagerBtn('remove', [[${list.userId}]], [[${list.userNickname}]])"
+               class=" btn">매니저 삭제</button>
+
+            <button th:if="not ${#strings.equals(list.userRole, 'ADMIN')}"
+               th:onclick="deleteUserBtn([[${list.userId}]], [[${list.userNickname}]])"
+               class="deleteBtn btn">회원정지</button>
+         </td>
+      </tr>
+   </tbody>
+</table>

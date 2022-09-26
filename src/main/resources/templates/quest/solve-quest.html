@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/main/index.css" />
+<link rel="stylesheet" href="/css/quest/solve-quest.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<style type="text/css">
+table {
+	width: 100%;
+	border-collapse: collapse;
+	cursor: default;
+}
+
+tr:nth-child(2) {
+	border-bottom: 0.1px solid #e5e5e5;
+}
+
+th, td {
+	padding: 10px;
+}
+</style>
+<script src="js/script.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script defer>
+	$(document).on('click', "input[type='radio']", function() {
+		thisRadio = $(this);
+		if (thisRadio.hasClass('imChecked')) {
+			thisRadio.removeClass('imChecked');
+			thisRadio.prop('checked', false);
+		} else {
+			thisRadio.prop('checked', true);
+			thisRadio.addClass('imChecked');
+		}
+	});
+
+	function questDetailsBtn(button) {
+		var no = button.value;
+
+		window.open('about:blank').location.href='/quest/' + no;
+	}
+</script>
+<script type="text/javascript">
+	var test;
+	var questList;
+	
+	$(document).ready(function(){
+		var no = $('#roundNo').val();
+		
+		$.ajax({
+			url:'/quest/select',
+			type:'post',
+			data:{roundNo:no},
+			success:function(data){				
+				$('#questCount').html(data.length);
+
+				$.ajax({
+					url:'/quest',
+					type:'post',
+					data:{param:JSON.stringify(data)},
+					success:function(data){	
+						$('#questList').html(data);
+					}
+				})
+			}
+		})
+		
+		$.ajax({
+			url:'/test/selectByRound',
+			type:'post',			
+			data:{roundNo:no},
+			success:function(data){
+				test = data;
+				$('#testName').html(data.testName);
+			}
+		})
+	})
+  
+	function quest(no, ans){
+		this.questNo = no;
+		this.answer = ans;
+	}
+	
+	function check(){
+		var answer = [];
+		var name;
+		var no;
+		var ans;
+		var ol = $('.questChoices');
+				
+		for(var o of ol){
+			no = $(o).attr('value');			
+			name = 'choice' + no;			 
+			ans = $('input[name=' + name + ']:checked').val();
+			answer.push(new quest(no, ans));
+		}
+	}
+</script>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>시험 이름</th>
+			<th>회차 이름</th>
+			<th>문제 번호</th>
+			<th>풀이 시간</th>
+		</tr>
+		<tr></tr>
+		<tr th:each="quest:${solvedList}">
+			<td th:text="${quest.TEST_NAME}"></td>
+			<td th:text="${quest.ROUND_NAME}"></td>
+			<td><a th:href="${'/quest/' + quest.QUEST_NO}"
+				th:text=${quest.QUEST_SEQ}></a></td>
+			<td th:text="${quest.REG_TIME}"></td>
+		</tr>
+	</table>
+</body>
+</html>

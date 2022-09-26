@@ -1,0 +1,280 @@
+body {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+
+  cursor: default;
+}
+
+.loginInput,
+.joinInput {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  min-width: 100px;
+  height: 48px;
+  max-height: 48px;
+
+  padding: 11px 12px;
+  margin: 12px 0;
+
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 1px;
+
+  font-size: var(--font-medium);
+  line-height: 24px;
+  letter-spacing: -0.015em;
+
+  color: rgb(13, 13, 13);
+  background: rgb(255, 255, 255);
+}
+
+.loginInput::placeholder,
+.joinInput::placeholder {
+  font-weight: normal;
+  font-size: var(--font-medium);
+  color: rgb(164, 164, 164);
+}
+
+.loginInput:focus,
+.joinInput:focus {
+  border: 1px solid var(--color-black);
+}
+
+.loginInput::selection,
+.joinInput::selection {
+  background-color: var(--color-light-grey);
+}
+
+.joinInput {
+  width: 100%;
+  min-width: 100px;
+  max-width: 280px;
+}
+
+#pwd2 {
+  margin: 0 0 12px 0;
+}
+
+.joinCheckBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  float: right;
+
+  height: 48px;
+  min-width: 110px;
+
+  white-space: nowrap;
+
+  padding: 2px 16px 0 16px;
+
+  border: 1px solid var(--color-black);
+  border-radius: 1px;
+
+  font-weight: 500;
+  font-size: var(--font-medium);
+  line-height: 27px;
+  letter-spacing: -0.02em;
+
+  color: var(--color-black);
+}
+
+.joinCheckBtn:hover {
+  background-color: var(--color-light-grey);
+}
+
+.joinCheckBtn:active {
+  background-color: #e1e1e1;
+}
+
+#submitBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  min-width: 100px;
+  height: 54px;
+  max-height: 54px;
+
+  white-space: nowrap;
+
+  padding: 13px 12px 11px 12px;
+  margin: 36px 0 28px 0;
+
+  border: 0px;
+  border-radius: 1px;
+
+  font-size: var(--font-xlarge);
+  font-weight: 600;
+  line-height: 24px;
+
+  color: var(--color-white);
+  background: var(--color-red);
+}
+
+#submitBtn:hover {
+  font-weight: 500;
+
+  color: #ff9b9b;
+}
+
+#submitBtn:active {
+  background-color: #e36448;
+}
+
+/* Login Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin-left: 20%;
+
+  color: var(--color-black);
+}
+
+.form h1 {
+  padding-bottom: 32px;
+
+  font-family: 'Clash Display';
+  font-size: var(--font-giant);
+  font-weight: 500;
+}
+
+.form h2 {
+  padding-bottom: 48px;
+
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 400px;
+}
+
+.form > form label {
+  font-size: var(--font-small);
+  font-weight: 600;
+
+  color: #646464;
+}
+
+.form .inputAndCheckBtnWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+}
+
+.form .pwdWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+}
+
+.form .pwdWrapper input {
+  width: 100%;
+  max-width: 600px;
+}
+
+.form > #errorMsg {
+  font-size: var(--font-medium);
+  font-weight: 500;
+
+  color: var(--color-red);
+}
+
+.form #goRegister,
+.form #goLogin {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  font-size: var(--font-small);
+  font-weight: 600;
+  color: rgb(149, 149, 149);
+}
+
+.form > #goRegister p,
+.form #goLogin p {
+  padding-right: 4px;
+}
+
+.form > #goRegister a,
+.form #goLogin a {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+
+  color: var(--color-blue);
+}
+
+#formImg {
+  display: block;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  width: 50%;
+  height: 100%;
+}
+
+#formImg img {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* Responsible Web */
+@media screen and (max-width: 1100px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: auto;
+    min-width: 350px;
+    
+    margin: 0;
+  }
+
+  #formImg {
+    display: none;
+  }
+}

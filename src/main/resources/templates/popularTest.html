@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="https://kit.fontawesome.com/267f657aa0.js" crossorigin="anonymous"></script>
+</head>
+<body>	
+	<script type="text/javascript">
+	</script>
+	<img src="/imgs/boardList-icons/popularBoard.png" class="icon" />
+	<h1>인기 시험</h1> 
+	<ul>
+		<li th:each="test:${rankList}">
+			<a th:href="${'/test/' + test.testNo}" th:text="${test.testName}">
+				<!-- <i class="fa-solid fa-chevron-right"></i> -->
+			</a>
+		</li>
+<!-- 		<li><a href="">Su국가기술자격시<i
+				class="fa-solid fa-chevron-right"></i></a></li>
+		<li><a href="">It IT·전산 IT·전산 e<i
+				class="fa-solid fa-chevron-right"></i></a></li>
+		<li><a href="">Su국가기술자asd격시<i
+				class="fa-solid fa-chevron-right"></i></a></li>
+		<li><a href="">가나아러 지<i class="fa-solid fa-chevron-right"></i></a>
+		</li> -->
+	</ul>
+</body>
+</html>

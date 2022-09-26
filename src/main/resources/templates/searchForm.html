@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Clever</title>
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="/js/script.js"></script>
+<style>
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+hr {
+  width: 100%;
+}
+
+#searchForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1160px;
+
+margin-bottom: 80px;
+}
+
+#searchForm > h1 {
+  padding: 22px 0 18px 0;
+
+  font-weight: 400;
+  font-size: var(--font-giant);
+}
+
+#searchForm > .container > #result h2 {
+  padding: 22px 0 18px 0;
+
+  font-weight: 500;
+  font-size: 20px;
+}
+ 
+.category__list li {
+display: flex;
+justify-content: flex-start;
+align-items: center;} 
+ 
+/* Responsible Web */
+@media screen and (max-width: 1270px) {
+  #searchForm {
+    padding: 0 50px;
+  }
+}
+
+</style>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	var where = new URL(location.href).searchParams.get('where');
+	var query = new URL(location.href).searchParams.get('query');
+
+	// 자바객체와 연동되는 JSON객체 생성
+	function toJson(data) {
+		const len = data.length;
+		var oldkeys;
+		var newkeys = []
+		var json = "[";
+
+		if (len == 0)
+			return null;
+		oldkeys = Object.keys(data[0]);
+
+		for ( var a in oldkeys)
+			newkeys[a] = toJsonName(oldkeys[a]);
+
+		for ( var i in data) {
+			json += "{";
+			for ( var a in newkeys) {
+				json += newkeys[a] + ":" + JSON.stringify(data[i][oldkeys[a]]);
+				if (a < newkeys.length - 1)
+					json += ",";
+			}
+			json += "}";
+			if (i < data.length - 1)
+				json += ",";
+		}
+		json += "]";
+
+		return JSON.parse(json);
+	}
+
+	//첫 번째 글자는 대문자로 변경
+	function toUpperfirst(name) {
+		const len = name.length;
+		var n = name[0].toUpperCase();
+
+		for (var a = 1; a < len; a++) {
+			n += name[a];
+		}
+		return n;
+	}
+
+	// JSON에서 사용가능한 key이름으로 변경
+	function toJsonName(name) {
+		var names = name.toLowerCase().split('_');
+		var camelName = names[0];
+
+		for (var a = 1; a < names.length; a++) {
+			camelName += toUpperfirst(names[a])
+		}
+		return '"' + camelName + '"';
+	}
+
+	$(document).ready(function() {
+		$.ajax({
+			url : '/search',
+			type : 'post',
+			data : {
+				where : where,
+				query : query
+			},
+			success : function(data) {
+				var result = $('#result');
+				var keys = Object.keys(data); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+
+				for (let i = 0; i < keys.length; i++) {
+					var key = keys[i];
+					var json = toJson(data[key]);
+
+					$.ajax({
+						url : '/search/condition',
+						type : 'post',
+						async : false, // 동기 처리
+						data : {
+							where : key,
+							count : json != null ? json.length : 0
+						},
+						success : function(data) {
+							var div = document.createElement("div");
+
+							div.innerHTML = data;
+							result.append(div);
+
+							if (json == null)
+								return;
+							$.ajax({
+								url : '/' + key.toLowerCase(),
+								type : 'post',
+								async : false, // 동기 처리
+								data : {
+									param : JSON.stringify(json)
+								},
+								success : function(data) {
+									result.append(data);
+								},
+								error : function() {
+									alert(key + ' 검색 실패')
+								}
+							})
+
+						},
+						error : function() {
+							alert('실패')
+						}
+					})
+				}
+			},
+			error : function() {
+				alert('검색 실패');
+			}
+		});
+	})
+</script>
+</head>
+<body>
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<form action="/form" method="post" id="searchForm">
+		<h1>검색 결과</h1>
+		<div id="navbar__divider"></div>
+
+		<div class="container">
+			<ul id="result">
+			</ul>
+
+			<div id="mainHide"></div>
+
+		</div>
+	</form>
+
+	<!-- footer -->
+	<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>

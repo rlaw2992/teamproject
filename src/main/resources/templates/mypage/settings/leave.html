@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/mypage/leave.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="https://kit.fontawesome.com/267f657aa0.js"
+	crossorigin="anonymous"></script>
+<script src="js/script.js"></script>
+</head>
+<body>
+	<!-- header -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<!-- delete account -->
+	<section th:with="info = ${session.user}" id="deleteAccount">
+ 		<h1 id="deleteAccount__title">회원 탈퇴</h1>
+		<div id="navbar__divider"></div>
+		<div class="leave__warning">
+			<div class="warning__title">
+				<h2>
+					탈퇴 전, 유의사항을<br /> 확인해주시기 바랍니다.
+				</h2>
+				<img src="/imgs/etc/404.svg" />
+			</div>
+			<div class="warning__description">
+				<h3>계정 및 기록</h3>
+				<ul>
+					<li>• 경고! 당신의 무심코 한 클릭 한번이 돌이킬 수 없는 결과를 불러옵니다. </li>
+					<li>• 문제 푼 기록ㅇ랑 ㄹ어저구랑 다 지워짐!!!!!!!!</li>
+					<li>• 문제 푼 기록ㅇ랑 ㄹ어저구랑 다 지워짐!!!!!!!!문제 푼 기록ㅇ랑 ㄹ어저구랑 다
+						지워짐!!!!!!!!</li>
+					<li>• 문제 푼 기록ㅇ랑 ㄹ어저구랑 다 지워짐!!!!!!!!</li>
+					<li>• 문제 푼 기록ㅇ랑 ㄹ어저구랑 다 지워짐!!!!!!!!</li>
+				</ul>
+				<div class="warning-check">
+				<input type="checkbox" name="warning-checkbox" /> 
+				<label for="warning-checkbox">탈퇴 유의사항을 확인했습니다.</label>
+				</div>
+				<div id="navbar__divider"></div>
+				<div class="leave">
+					<form action="/deleteAccount" method="post">
+						<button type="submit">회원탈퇴</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- footer -->
+	<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>

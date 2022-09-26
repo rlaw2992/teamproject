@@ -1,0 +1,97 @@
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 50px 0;
+
+  width: 100%;
+
+  transition: var(--transition-default);
+
+  cursor: default;
+
+  color: var(--color-black);
+  background-color: var(--color-ivory);
+}
+
+footer > .footer__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 1160px;
+
+  padding-bottom: 30px;
+}
+
+footer > .footer__main > #footer__logo {
+  font-size: var(--font-big);
+  font-weight: 500;
+
+  font-family: 'Clash Display';
+}
+
+footer > .footer__main > #footer_describe {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+footer > .footer__main > #footer_describe h1 {
+  font-size: var(--font-large);
+  font-weight: 600;
+
+  padding-bottom: 13px;
+}
+
+footer > .footer__main > #footer_describe > .madePeople {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: var(--font-medium);
+  font-weight: 400;
+}
+
+footer > .footer__main > #footer_describe > .madePeople img {
+  height: 40px;
+
+  margin-right: 16px;
+
+  transition: var(--transition-default);
+}
+
+footer > .footer__main > #footer_describe > .madePeople img:hover {
+  transform: rotate(-10deg);
+}
+
+footer > .footer__side {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  width: 100%;
+  max-width: 1160px;
+}
+
+footer > .footer__side > .copyright {
+  font-size: var(--font-small);
+  font-weight: 400;
+}
+
+footer > .footer__side > .footer_icons > a > img {
+  width: 30px; 
+
+  color: var(--color-light-grey);
+}
+
+/* Responsible Web */
+@media screen and (max-width: 1270px) {
+  footer {
+    padding: 50px;
+  }
+}

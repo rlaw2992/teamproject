@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dip.clever.mapper.RoundMapper">
+	<!-- 카테고리 목록 불러오기 -->
+	<select id="selectRoundList" parameterType="int" resultMap="round">
+		SELECT		*
+		FROM		TB_ROUND
+		WHERE		TEST_NO = #{testNo}
+		AND			USE_F = 'Y'
+		ORDER BY	ROUND_NAME	DESC
+	</select>
+	
+	<select id="selectRound" parameterType="int" resultMap="round">
+		SELECT		*
+		FROM		TB_ROUND
+		WHERE		ROUND_NO = #{roundNo}
+		AND			USE_F = 'Y'
+	</select>
+		
+	<select id="selectLastInsert" resultType="int">
+		SELECT		LAST_INSERT_ID()
+		FROM		TB_ROUND
+		LIMIT		1
+	</select>
+	
+	<select id="selectNewRound" resultMap="round">
+		SELECT		ROUND_NO, ROUND_NAME
+		FROM		TB_ROUND
+		ORDER BY	ROUND_NO	DESC
+		LIMIT 5
+	</select>
+	
+	<!-- 회차등록 -->
+	<insert id="insertRound">
+		INSERT INTO TB_ROUND (TEST_NO, REG_USER, ROUND_NAME, TEST_DATE, USE_F)
+		VALUES (#{testNo}, #{regUser}, #{roundName}, #{testDate}, 'Y')
+	</insert>
+	
+	<!-- 회차 매핑 -->
+	<resultMap type="dip.clever.model.Round" id="round" >
+		<result property="roundNo" 	column="ROUND_NO"/>
+		<result property="testNo" column="TEST_NO"/>		
+		<result property="regUser" column="REG_USER"/>
+		<result property="roundName" column="ROUND_NAME"/>
+	</resultMap>	
+	
+	<!-- 밑에 부분은 사용하지 않음 -->
+	
+<!-- 	<select id="findByArticleLike" parameterType="java.util.HashMap" resultMap="articleInfo">
+		SELECT		T1.NO,
+					T1.TITLE	,
+					T2.NAME		AS USER_NAME,
+					T1.CRE_DATE	,
+					T1.MOD_DATE
+		FROM		TB_ARTICLE	AS T1
+		LEFT JOIN	TB_USER		AS T2
+			ON			T1.USER_ID = T2.ID
+		INNER JOIN	TB_BOARD	AS T3
+			ON			T1.BOARD_ID = T3.ID
+			AND			T3.USE_F = 'Y'
+		WHERE		TITLE LIKE '%${title}%'
+		AND			T1.USE_F = 'Y'
+	</select> -->
+	
+	<select id="searchCount" parameterType="String" resultType="int">
+		SELECT		COUNT(*)
+		FROM		TB_ARTICLE
+		WHERE		TITLE LIKE '%${query}%'
+	</select>
+	
+	<select id="checkUser" parameterType="int" resultType="String">
+		SELECT		USER_ID
+		FROM		TB_ARTICLE
+		WHERE		NO = ${no}
+	</select>
+	
+	<update id="updateArticle" parameterType="map">
+		UPDATE	TB_ARTICLE
+		SET		TITLE = #{title},
+				CONTENT = #{content},
+				MOD_DATE = SYSDATE()
+		WHERE	NO = #{no}
+	</update>
+	
+	<update id="deleteArticle" parameterType="int">
+		UPDATE	TB_ARTICLE
+		SET		USE_F = 'N'
+		WHERE	NO = #{no}
+	</update>	
+	
+<!-- 	<resultMap type="info.thecoding.model.Article" id="article" >
+		<result property="boardId" 	column="BOARD_ID"/>
+		<result property="boardName"	column="BOARD_NAME"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="userId"	column="USER_ID"/>
+		<result property="title"	column="TITLE"/>
+		<result property="creDate"	column="CRE_DATE"/>
+		<result property="modDate"	column="MOD_DATE"/>
+		<result property="content"	column="CONTENT"/>
+		<result property="readCnt"	column="READ_CNT"/>
+	</resultMap> -->
+</mapper>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>settings profile</title><script src="/js/script.js"></script>
+    
+    <style>
+      #settings__userInfo > ul > li > .edit__info > .profile__description {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
+      #settings__userInfo > ul > li > .edit__info > .profile__description > p {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        width: auto;
+        min-width: 300px;
+        height: 100%;
+
+        padding: 5px 0 2px 5px;
+
+        font-size: var(--font-small);
+
+        color: var(--color-dark-grey);
+      }
+
+      #settings__userInfo > ul > li > .edit__info > .profile__description > h3,
+      #settings__userInfo > ul > li > h3 {
+      	width: 90px;
+      
+        font-size: 16px;
+        font-weight: 600;
+
+        color: var(--color-black);
+      }
+
+      /* 수정 폼 */
+      .upload__btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        -webkit-box-align: center;
+        -webkit-box-pack: center;
+
+        height: 32px;
+
+        padding: 0px 12px 1px 12px;
+        margin: 0px;
+
+        border: 1px solid rgb(230, 230, 230);
+        border-radius: 4px;
+
+        font-weight: 400;
+        color: rgb(109, 109, 109);
+        background-color: var(--color-white);
+
+        cursor: pointer;
+      }
+
+      .upload__btn:hover {
+        background-color: var(--color-light-grey);
+      }
+
+      .upload__btn:active {
+        background-color: #e7e7e7;
+      }
+
+      .upload__btn input {
+        width: 0.1px;
+        height: 0.1px;
+
+        opacity: 0;
+        overflow: hidden;
+
+        position: absolute;
+        z-index: -1;
+      }
+
+      .upload__Btn label {
+        cursor: pointer;
+      }
+
+      #settings__userInfo > ul > li > .edit__info > .img__upload {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        height: 100%;
+        min-height: 109px;
+      }
+
+      #settings__userInfo > ul > li > .edit__info > .img__upload #profile__img {
+        width: 78px;
+      }
+
+      #settings__userInfo
+        > ul
+        > li
+        > .edit__info
+        > .img__upload
+        .img__upload-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: flex-start;
+
+        height: 90px;
+
+        margin-left: 18px;
+      }
+
+      #settings__userInfo
+        > ul
+        > li
+        > .edit__info
+        > .img__upload
+        > .img__upload-actions
+        p {
+        width: 100%;
+        min-width: 251px;
+
+        font-size: var(--font-small);
+        font-weight: 400;
+        color: var(--color-dark-grey);
+      }
+    </style>
+    <script defer>
+      // 취소 버튼 클릭 시 html 복구(ajax 출력 이전으로)
+      var originalImgHtml = $('#replace-edit-img').html();
+      var originalNameHtml = $('#replace-edit-name').html();
+  		var interval;
+ 
+      // ajax 출력하는 메소드
+      function changeInfoBtn(info) {
+        $.ajax({
+          url: '/settings-profile/' + info,
+          type: 'POST',
+          success: function (data) {
+            $('#replace-edit-' + info).html(data);
+          },
+        });
+      }
+      
+      // 변경 사항 컨트롤러를 통해 실제 업데이트하는 메소드
+       function updateNameBtn() {
+        var input = confirm('이름을 변경하시겠습니까?');
+        if (input == true) {
+          $.ajax({
+            url: '/update-name',
+            type: 'POST',
+            data: {
+              userId: $('#userId').val(),
+              userNickname: $('#userName').val(),
+            },
+            dataType: 'text',
+            success: function (message) {
+              alert(message);
+              location.replace('/mypage-setting');
+            },
+          });
+        }
+      }  
+      
+      // 취소 버튼 클릭 시 html 복구(ajax 출력 이전으로)
+      function cancelImgBtn() {
+        $('#replace-edit-img').html(originalImgHtml);
+      }
+
+      function cancelNameBtn() {
+        $('#replace-edit-name').html(originalNameHtml);
+      }
+    </script>
+  </head>
+  <body>
+    <section th:with="info = ${session.user}" id="settings__userInfo">
+      <ul>
+        <li id="replace-edit-img">
+          <div class="edit__info">
+            <div class="profile__description">
+              <h3>프로필 사진</h3>
+              <p>*첫 프로필 사진은 회원가입시 랜덤으로 배정됩니다.</p>
+            </div>
+            <img th:src="${'/imgs/profile/user/' + session.user.userId + '.png'}" id="profile__img" />
+          </div>
+          <button onclick="changeInfoBtn('img')" class="settingsBtn btn">변경</button>
+        </li>
+        <li><div id="divider"></div></li>
+        <li th:with="info = ${session.user}" id="replace-edit-name">
+          <div class="edit__info">
+            <h3>이름</h3>
+            <p th:text="${info.userNickname}"></p>
+          </div>
+          <button onclick="changeInfoBtn('name')" class="settingsBtn btn">
+            변경
+          </button>
+        </li>
+      </ul>
+      <hr />
+    </section>
+  </body>
+</html>

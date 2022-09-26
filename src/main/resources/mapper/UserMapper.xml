@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dip.clever.mapper.UserMapper">
+
+  <resultMap type="dip.clever.model.User" id="userMap">
+		<result property="userId" column="USER_ID" />
+		<result property="userNickname" column="USER_NICKNAME" />
+		<result property="userPwd" column="USER_PWD" />
+		<result property="userEmail" column="USER_EMAIL" />
+		<result property="userRole" column="USER_ROLE" />
+		<result property="userExp" column="USER_EXP" />
+		<result property="regTime" column="REG_TIME" />
+	</resultMap>
+		
+	<select id="selectUserList" resultType="dip.clever.model.User">
+		SELECT USER_ID,
+		USER_NICKNAME, USER_NICKNAME, USE_F
+		FROM TB_USER
+		WHERE USE_F = 'Y'
+	</select>
+
+	<!-- 회원가입 -->
+	<insert id="insertUser" parameterType="dip.clever.model.User">
+		INSERT INTO TB_USER
+		(USER_ID, USER_NICKNAME, USER_PWD, USER_EMAIL,
+		USER_ROLE, USE_F)
+		VALUES(#{userId}, #{userNickname}, #{userPwd},
+		#{userEmail}, 'USER',
+		'Y')
+	</insert>
+
+ 
+	<select id="selectUser" parameterType="dip.clever.model.User"
+		resultMap="userMap">
+		SELECT	T1.*,(
+			SELECT	COUNT(*)
+			FROM (
+				SELECT		*
+				FROM		TB_LOG
+				WHERE		USER_ID = #{userId}
+				AND			ACTION = 'SOLVED'
+				GROUP BY	USER_ID, TARGET_ID
+				)	AS T
+			)		AS USER_EXP
+		FROM	TB_USER		AS T1
+		WHERE 	USE_F = 'Y'
+		AND 	BINARY(USER_ID) = #{userId}
+		AND 	BINARY(USER_PWD) = #{userPwd}
+	</select>
+
+	<!-- 아이디 확인 -->
+	<select id="findUserId" parameterType="string" resultType="string">
+		SELECT	USER_ID
+		FROM	TB_USER		AS T1
+		WHERE 	USER_ID = #{userId}
+	</select>
+
+
+	<!-- 유저 확인 -->
+	<select id="findUserNickname" parameterType="string"
+		resultType="string">
+		SELECT USER_NICKNAME
+		FROM TB_USER
+		WHERE USER_NICKNAME =
+		#{userNickname}
+	</select>
+
+	<!-- 유저 리스트출력 -->
+	<select id="findAll" resultMap="userMap">
+		SELECT *
+		FROM TB_USER
+		WHERE USE_F = 'Y'
+	</select>
+	
+	<!-- 유저 서치 리스트출력 -->
+	<select id="findSearchResult" resultMap="userMap">
+		SELECT 		T1.* , 
+					IFNULL(T2.USER_EXP, 0)		AS USER_EXP
+		FROM		TB_USER		AS T1
+		LEFT JOIN	(
+			SELECT	USER_ID, COUNT(*)			AS USER_EXP
+			FROM (
+				SELECT		T3.*
+				FROM			TB_LOG				AS T3
+				INNER JOIN		TB_USER				AS T4
+					ON				T3.USER_ID = T4.USER_ID
+				WHERE			ACTION = 'SOLVED'
+				GROUP BY		USER_ID, TARGET_ID
+				)		AS T
+			GROUP BY 		USER_ID
+			)			AS T2
+			ON					T1.USER_ID = T2.USER_ID
+		WHERE		T1.USER_ID LIKE '%${keyword}%'
+		AND			USE_F = 'Y'
+	</select>
+
+	<!-- 유저 삭제 -->
+	<update id="deleteUser" parameterType="String">
+		UPDATE	TB_USER
+		SET		USE_F = 'N'
+		WHERE	user_Id = #{id}
+	</update>
+	
+	<update id="updateManager" parameterType="String">
+		UPDATE	TB_USER
+		SET		USER_ROLE = 'MANAGER'
+		WHERE	user_Id = #{id}
+	</update>
+	
+	<update id="updateUser" parameterType="String">
+		UPDATE	TB_USER
+		SET		USER_ROLE = 'USER'
+		WHERE	user_Id = #{id}
+	</update>
+	
+	<!-- 메일 확인 -->
+	<select id="findUserEmail" parameterType="string"
+		resultType="string">
+		SELECT USER_EMAIL
+		FROM TB_USER
+		WHERE USER_EMAIL =
+		#{userEmail}
+	</select>
+
+	<!-- ** mypage ** -->
+	<!-- 아이디로 유저 찾기 -->
+	<select id="findUserById" parameterType="dip.clever.model.User">
+		SELECT	*
+		FROM	TB_USER
+		WHERE	USER_ID = #{userId}
+	</select>
+	
+	<!-- 개인정보 수정 -->
+	<!-- 이름 변경 -->
+	<update id="editUserName" parameterType="dip.clever.model.User">
+		UPDATE	TB_USER
+		SET		USER_NICKNAME = #{userNickname}
+		WHERE	USER_ID = #{userId}
+	</update>
+	
+	<!-- 이메일 변경 -->
+	<update id="editUserEmail" parameterType="dip.clever.model.User">
+		UPDATE	TB_USER
+		SET		USER_EMAIL = #{userEmail}
+		WHERE	USER_ID = #{userId}
+	</update>
+	
+	
+	<!-- 비밀번호 변경 -->
+	<update id="editUserPwd" parameterType="dip.clever.model.User">
+		UPDATE	TB_USER
+		SET		USER_PWD = #{userPwd}
+		WHERE	USER_ID = #{userId}
+	</update>
+	
+	<!-- 회원 탈퇴-->
+	<update id="deleteAccount" parameterType="dip.clever.model.User">
+		UPDATE	TB_USER
+		SET		USE_F = 'N'
+		WHERE	USER_ID = #{userId}
+	</update>
+	
+</mapper>

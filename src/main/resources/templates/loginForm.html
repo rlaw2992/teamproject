@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" th:href="@{/imgs/favicon.ico}">
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/login.css" />
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/util.js"></script>
+<script src="/js/script.js"></script>
+<script type="text/javascript">
+	window.history.forward();
+
+	$('document').ready(
+			function() {
+				let randomNum = Math.floor(Math.random() * 10);
+				$('#random__img').attr('src',
+						'/imgs/slidebar/illustration-' + randomNum + '.svg');
+			});
+
+	function noBack() {
+		window.history.forward();
+	}
+
+	function login() {
+		var pwd = $('#userPwd').val();
+
+		$('#encodePwd').val(encode(pwd))
+	}
+</script>
+</head>
+<body onload="noBack();" onpageshow="if(event.persisted) noBack();"
+	onunload="">
+	<div class="form">
+		<a href="/"><h1>Clever</h1></a>
+		<h2>로그인</h2>
+		<form action="/user/login" method="post">
+			<label for="userId">아이디</label> <input placeholder="아이디를 입력해주세요"
+				class="loginInput" name="userId" type="text" required /> <label
+				for="userPwd">비밀번호</label> <input type="hidden" id="encodePwd"
+				name="userPwd" /> <input placeholder="비밀번호를 입력해주세요" id="userPwd"
+				class="loginInput" type="password" required />
+			<div th:if="${loginError}" th:text="'로그인 실패'" id="errorMsg"></div>
+			<button onclick="login();" id="submitBtn" type="submit">로그인</button>
+		</form>
+		<div id="goRegister">
+			<p>아직 계정이 없으신가요?</p>
+			<a href="/join">회원가입</a>
+		</div>
+	</div>
+
+	<div id="formImg">
+		<img id="random__img" />
+	</div>
+</body>
+</html>

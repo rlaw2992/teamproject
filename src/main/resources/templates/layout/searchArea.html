@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="search">
+	<div th:replace="layout/header2 :: logo"></div>
+	<!-- 검색 기능 -->
+	<form action="/search" id="searhform" class="search_area" name="searhform" method="get">
+		<fieldset class="search-box">
+			<select id="where" name="where" title="검색 범위 선택"></select>
+			<span class="green_window">
+				<input id="query" name="query" type="text" 
+					title="검색어 입력" maxlength="255" class="input_text"
+					tabindex="1" accesskey="s" style="ime-mode: active;"
+					autocomplete="off" placeholder="검색어를 입력해 주세요.">
+			</span>
+			<button id="search_btn" class="search-btn" type="submit"
+				title="검색" tabindex="3">
+				<img src=" /imgs/header/search.png" alt="search" width="256px"/>
+			</button>
+		</fieldset>
+	</form>
+	<!-- 자동완성레이어 -->
+	<div id="autoFrame" class="reatcmp" style="display: none;"></div>
+	<script type="text/javascript">	
+		//검색 조건 불러오기
+		$.ajax({
+			url:'/search/conditionList',
+			type:'post',
+			success:function(data){				
+				let where = $('#where');
+								
+				for(var d of data){
+					$(where).append(d);
+				}				
+				$(where).children()[0].selected = true;
+			}
+		})
+	</script>
+</div>
+</html>

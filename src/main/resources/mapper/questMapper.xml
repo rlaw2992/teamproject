@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dip.clever.mapper.QuestMapper">
+	<select id="selectQuestList" parameterType="int" resultMap="quest">
+		SELECT		T1.QUEST_NO,
+					T1.QUEST_SEQ,
+					T1.QUEST_CONTENT,
+					C1, C2, C3, C4, C5
+		FROM		TB_QUEST	AS T1
+		LEFT JOIN	TB_CHOICE	AS T2
+			ON			T1.QUEST_NO = T2.QUEST_NO
+		WHERE		ROUND_NO = #{roundNo}
+		AND			USE_F = 'Y';
+	</select>
+	
+	<select id="selectQuest" parameterType="int" resultMap="quest">
+		SELECT		T1.QUEST_NO,
+					T1.QUEST_SEQ,
+					T1.QUEST_CONTENT,
+					T3.REG_USER,
+					C1, C2, C3, C4, C5
+		FROM		TB_QUEST	AS T1
+		INNER JOIN	TB_CHOICE	AS T2
+			ON			T1.QUEST_NO = T2.QUEST_NO
+		INNER JOIN	TB_ROUND	AS T3
+			ON			T1.ROUND_NO = T3.ROUND_NO 
+		WHERE		T1.QUEST_NO = #{questNo}
+		AND			T1.USE_F = 'Y'
+	</select>
+
+	<select id="selectSolvedList" parameterType="string" resultType="java.util.HashMap">
+		SELECT		T4.TEST_NAME, 
+					T3.ROUND_NAME, 
+					T2.QUEST_SEQ,
+					T2.QUEST_NO,
+					T1.REG_TIME
+		FROM		(
+			SELECT		USER_ID, TARGET_ID, REG_TIME
+			FROM		TB_LOG
+			WHERE		ACTION = 'SOLVED'
+			GROUP BY	USER_ID, TARGET_ID
+			ORDER BY	REG_TIME
+		)							AS T1
+		INNER JOIN	tb_quest		AS T2
+			ON			TARGET_ID = QUEST_NO
+		INNER JOIN	tb_round		AS T3
+			ON			T3.ROUND_NO = T2.ROUND_NO
+		INNER JOIN	tb_test		AS T4
+			ON			T4.TEST_NO = T3.TEST_NO
+		WHERE		T1.USER_ID = #{userId}
+	</select>
+	
+	<select id="selectUploadList" parameterType="string" resultType="java.util.HashMap">
+		SELECT		T2.TEST_NAME, T1.ROUND_NAME, T1.ROUND_NO, T1.REG_TIME
+		FROM		TB_ROUND		AS T1
+		INNER JOIN	TB_TEST			AS T2
+			ON			T2.TEST_NO = T1.TEST_NO
+		WHERE			REG_USER = #{userId}
+		AND			T1.USE_F = 'Y'
+	</select>
+	
+	<select id="selectQuestInfo" parameterType="int" resultType="java.util.HashMap">
+		SELECT		T1.TEST_NAME,
+					T2.ROUND_NAME,(
+						SELECT	COUNT(*)
+						FROM		tb_quest	AS T4
+						WHERE		T4.ROUND_NO = T2.ROUND_NO
+					)			AS COUNT
+		FROM			tb_test		AS T1
+		INNER JOIN		tb_round	AS T2
+		ON					T2.TEST_NO = T1.TEST_NO
+		INNER JOIN		tb_quest	AS T3
+		ON					T3.ROUND_NO = T2.ROUND_NO
+		WHERE			T3.QUEST_NO = #{questNo}
+	</select>
+	
+	<select id="selectNextQuest" parameterType="int" resultType="Integer">
+		SELECT		*
+		FROM		tb_quest	AS T1
+		INNER JOIN	tb_round	AS T2
+			ON			T1.ROUND_NO = T2.ROUND_NO
+		WHERE		T1.ROUND_NO = (
+			SELECT		ROUND_NO
+			FROM		tb_quest
+			WHERE		QUEST_NO = #{questNo}
+			)
+		AND			T1.QUEST_NO > #{questNo}
+		LIMIT			1
+	</select>
+	
+	<select id="checkAnswer" parameterType="map" resultType="int">
+		SELECT		T1.QUEST_NO
+		FROM		TB_QUEST	AS	T1
+		INNER JOIN	
+			<foreach collection="collection=collection" item="answer" index="index"
+				open="(" separator="UNION" close=")">
+				SELECT	#{answer.questNo}	AS QUEST_NO,
+						#{answer.answer}	AS ANSWER
+			</foreach>			AS T2			
+			ON			T1.QUEST_NO = T2.QUEST_NO
+			AND			T1.ANSWER = T2.ANSWER			
+	</select>
+  
+	<!-- 문제 매핑 -->
+	<resultMap type="dip.clever.model.Quest" id="quest" >
+		<result property="questNo" 	column="QUEST_NO"/>
+		<result property="regUser" 	column="REG_USER"/>
+		<result property="roundNo" column="ROUND_NO"/>		
+		<result property="questSeq" column="QUEST_SEQ"/>
+		<result property="questContent" column="QUEST_CONTENT"/>
+		<result property="choice.c1" column="C1"/>
+		<result property="choice.c2" column="C2"/>
+		<result property="choice.c3" column="C3"/>
+		<result property="choice.c4" column="C4"/>
+		<result property="choice.c5" column="C5"/>
+		<result property="answer" column="ANSWER"/>
+	</resultMap>
+		
+	<!-- 밑에 부분은 사용하지 않음 -->	
+	<update id="updateArticle" parameterType="map">
+		UPDATE	TB_ARTICLE
+		SET		TITLE = #{title},
+				CONTENT = #{content},
+				MOD_DATE = SYSDATE()
+		WHERE	NO = #{no}
+	</update>
+	
+	<update id="deleteArticle" parameterType="int">
+		UPDATE	TB_ARTICLE
+		SET		USE_F = 'N'
+		WHERE	NO = #{no}
+	</update>
+	
+<!-- 	<resultMap type="info.thecoding.model.Article" id="article" >
+		<result property="boardId" 	column="BOARD_ID"/>
+		<result property="boardName"	column="BOARD_NAME"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="userId"	column="USER_ID"/>
+		<result property="title"	column="TITLE"/>
+		<result property="creDate"	column="CRE_DATE"/>
+		<result property="modDate"	column="MOD_DATE"/>
+		<result property="content"	column="CONTENT"/>
+		<result property="readCnt"	column="READ_CNT"/>
+	</resultMap> -->
+</mapper>

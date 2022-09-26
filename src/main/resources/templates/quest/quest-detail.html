@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy"
+	content="upgrade-insecure-requests">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/quest/quest-detail.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="/js/script.js"></script>
+<script src="https://kit.fontawesome.com/267f657aa0.js"
+	crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<script defer>
+	const placeholder = $('placeholder');
+	const button = $('#sendCommentBtn');
+
+	button.disabled = true;
+
+	function stateHandle() {
+		if (placeholder.val() === '') {
+			button.disabled = true;
+		} else {
+			button.disabled = false;
+		}
+	}
+
+	function sendCommentBtn() {
+		alert('11');
+	}
+
+	function replyOnclick(button) {
+		// $('button', $('#replyDropdown')).classList.toggle('show');
+		button.querySelector('#replyDropdown').classList.toggle('show');
+
+		window.onclick = function(event) {
+			if (event.target.matches('#replyDropdown')) {
+				button.getElementById('replyDropdown').classList.remove('show');
+				comment.css({
+					padding : '32px',
+				});
+			}
+
+			var dropdowns = button.getElementsByClassName('profile-dropdown');
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+				var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+				}
+			}
+		};
+	}
+
+	function editReply(locaion) {
+		$.ajax({
+			url : '/edit-reply',
+			type : 'POST',
+			dataType : 'text',
+			data : {},
+			success : function(data) {
+				$('.replace-commentEdit').html(data);
+			},
+		});
+	}
+
+	function deleteReply(locaion) {
+		var input = confirm('댓글을 삭제하시겠습니까?');
+		if (input == true) {
+			$.ajax({
+				url : '/delete-reply',
+				type : 'POST',
+				data : {},
+				success : function(data) {
+					alert(data);
+				},
+			});
+		}
+	}
+</script>
+</head>
+<body>
+	<!-- header -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<!-- quest -->
+	<div id="testDetails">
+		<h1>산업안전기사</h1>
+		<div class="details__title">
+			<h2>2022년 2회</h2>
+			<p>총</p>
+			<p>100</p>
+			<p>문제</p>
+		</div>
+	</div>
+	<div id="navbar__divider"></div>
+
+	<div id="quest">
+		<div class="questNumAndQuestContent">
+			<p class="questInfo">
+				<span class="questNum">30</span><span class="questNum">.</span> <span
+					class="questContent"> 정신작업 부하를 측정하는 척도를 크게 4가지로 분류할 때 심박수의
+					변동, 뇌 전위, 동공 반응 등 정보처리에 중추신경계 활동이 관여하고 그 활동이나 징후를 측정하는 것은?</span>
+			</p>
+		</div>
+
+		<!-- 객관식 경우 -->
+		<div class="questChoices">
+			<ol>
+				<li><label><input type="radio" name="choice"
+						class="choice" /> 주관적(subjective) 척도</label></li>
+				<li><label><input type="radio" name="choice"
+						class="choice" /> 주관적(subjective) asd척도</label></li>
+				<li><label><input type="radio" name="choice"
+						class="choice" /> 주관적(subjective) fff척도</label></li>
+				<li><label><input type="radio" name="choice"
+						class="choice" /> 주관적(subjective) 척ds도</label></li>
+			</ol>
+		</div>
+
+		<!-- 주관식 경우 -->
+		<!-- <div class="questAnswer">
+        <input class="short-answer" type="text" />
+      </div> -->
+	</div>
+
+	<div id="goBack">
+		<button onclick="goBackBtn()" id="goBackBtn">뒤로가기</button>
+	</div>
+	<hr />
+
+	<div id="comment">
+		<!-- write comment -->
+		<div id="writeComment">
+			<!-- user info -->
+			<div class="user__profile">
+				<!-- 프로필 사진 -->
+				<div class="profile__img">
+					<img src="imgs/profile-img.png" />
+				</div>
+				<!-- 이름 -->
+				<!-- <p th:text="${info.userNickname}" id="profile__name">오다원</p> -->
+				<!-- 레벨 -->
+				<div id="profile__badge">
+					<!-- <img th:if="${info.userExp} >= 300" src="imgs/badge/master.svg" /><img
+						th:if="${info.userExp} >= 100" src="imgs/badge/level2.svg" /><img
+						th:if="${info.userExp} >= 50" src="imgs/badge/level1.svg" /><img
+						th:if="${info.userExp} >= 0" src="imgs/badge/new.svg" /> -->
+				</div>
+			</div>
+			<!-- write comment form -->
+			<textarea class="writeForm" placeholder="댓글을 작성해주세요."></textarea>
+
+			<!-- send button -->
+			<div id="sendBtn">
+				<input type="button" onclick="sendCommentBtn()" id="sendCommentBtn"
+					value="전송" />
+			</div>
+		</div>
+
+		<!-- comment list -->
+		<ul id="commentList">
+			<li th:each="reply:${user}">
+				<!-- user info --> <!-- 프로필 사진 -->
+				<div class="comment__content">
+					<div class="leftWrapper">
+						<div class="profile__img">
+							<img src="imgs/profile-img.png" />
+						</div>
+						<!-- 유저 이름/등급 / 댓글 내용 -->
+						<div class="userInfoAndCommentWrapper">
+							<div class="profileWrapper">
+								<div class="nameAndLevelWrapper">
+									<!-- 이름 -->
+									<p th:text="${reply.USER_NICKNAME}" id="profile__name"></p>
+									<!-- 레벨 -->
+									<div id="profile__badge">
+										<img th:if="${reply.USER_EXP} >= 300"
+											src="imgs/badge/master.svg" /><img
+											th:if="${reply.USER_EXP} >= 100" src="imgs/badge/level2.svg" /><img
+											th:if="${reply.USER_EXP} >= 50" src="imgs/badge/level1.svg" /><img
+											th:if="${reply.USER_EXP} >= 0" src="imgs/badge/new.svg" />
+									</div>
+								</div>
+								<!-- 작성 시간 -->
+								<p th:text="${reply.REG_TIME}">한 시간 전</p>
+							</div>
+							<div class="commentContent">
+								<p th:text="${reply.CONTENT}" class="replace-commentEdit"></p>
+							</div>
+						</div>
+					</div>
+					<div onclick="replyOnclick(this)" class="comment__actions">
+						<i class="fa-solid fa-ellipsis-vertical"></i>
+						<div id="replyDropdown" class="reply-dropdown">
+							<ul>
+								<li onclick="editReply(this)"><a href="/edit-reply">수정</a></li>
+								<li onclick="deleteReply(this)"><a href="/delete-reply">삭제</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div id="navbar__divider"></div>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

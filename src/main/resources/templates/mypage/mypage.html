@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/mypage/mypage.css" />
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="js/script.js"></script>
+<script src="https://kit.fontawesome.com/267f657aa0.js"
+	crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<style type="text/css">
+tr>td {
+	text-align: center;
+}
+</style>
+<script th:inline="javascript">
+	var user = JSON.parse('[[${session.user}]]');
+	var marker;
+	var item;
+
+	//세션 없으면 메인으로 돌아감
+	function noSession() {
+		alert('세션 없음');
+		location.href = "/";
+	}
+
+	//마커 표시
+	function indicator(e) {
+		marker.style.left = e.offsetLeft + "px";
+		marker.style.width = e.offsetWidth + "px";
+	}
+
+	function active(event) {
+		item.removeClass('active');
+		indicator(event);
+		$(event).addClass('active');
+	}
+
+	function ajax(url){
+		$.ajax({
+			url:url,
+			type:'post',
+			data:{userId:user.userId},
+			success : function(data) {
+				$('#replace-content').html(data);
+			},
+		})
+	}
+	function myQuest(event, target) {
+		active(event);
+		ajax('/quest/' + target + 'List');
+	}
+
+	function myReply(event) {
+		active(event);
+		ajax('/reply/' + user.userId);
+	}
+
+	function myLevel(event) {
+		active(event);
+		ajax('/user/level');		
+	}
+  
+	// default: 내 문제 - 내가 푼 문제
+	$(document).ready(function() {
+		const day = 1000 * 60 * 60 * 24;
+		var now = new Date();
+		var date;
+		var diff;
+
+		if (user == null)
+			noSession();
+
+		date = new Date(user.regTime);
+		diff = parseInt((now.getTime() - date.getTime()) / day);
+
+		diff = diff > 0 ? diff + "일 전 가입" : "오늘 가입";
+		$('#joinDay').html(diff);
+
+		marker = document.querySelector(".marker");
+		item = $('.mypage__list p');
+
+		myQuest(item[0],'solved');
+	});
+</script>
+</head>
+<body>
+	<!-- header -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+	<input type="hidden" id="userId" th:value="${session.user?.userId}">
+	<input type="hidden" id="userRegTime"
+		th:value="${session.user?.regTime}">
+	<!-- mypage -->
+	<section id="mypage">
+		<!-- user profile -->
+		<div class="mypage__profile">
+			<!-- user profile image -->
+			<img th:src="${'/imgs/profile/user/' + session.user.userId + '.png'}" />
+			<div th:with="info = ${session.user}" class="mypage__profile-info">
+
+				<div class="usernameAndsetting__wrapper">
+					<!-- user name -->
+					<h1 th:text="${info.userNickname}"></h1>
+					<!-- setting icon -->
+					<a href="/mypage/setting"> <img src="imgs/mypage/settings.png" />
+					</a>
+				</div>
+				<!-- user regdate -->
+				<!-- <p th:text="${#calendars.format(#calendars.createNow()}"></p> -->
+				<p id="joinDay"></p>
+				<!-- user badge -->
+				<div th:if="${info.userExp} >= 300" class="badge">
+					<img src="imgs/badge/master.svg" />
+					<p th:text="${info.userExp}"></p>
+				</div>
+				<div th:if="${info.userExp} >= 100" class="badge">
+					<img src="imgs/badge/level2.svg" />
+					<p th:text="${info.userExp}"></p>
+				</div>
+				<div th:if="${info.userExp} >= 50" class="badge">
+					<img src="imgs/badge/level1.svg" />
+					<p th:text="${info.userExp}"></p>
+				</div>
+				<div th:if="${info.userExp} >= 0" class="badge">
+					<img src="imgs/badge/new.svg" imgwidth="40px" />
+					<p th:text="${info.userExp}"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- user activity -->
+		<nav class="mypage__list">
+			<!-- tab navigation -->
+			<p onclick="myQuest(this, 'solved')">내가 푼 문제</p>
+			<p onclick="myQuest(this, 'upload')">내가 올린 문제</p>
+			<p onclick="myReply(this)">내 댓글</p>
+			<p onclick="myLevel(this)">등급</p>
+			<div class="marker" target="_blank"></div>
+		</nav>
+		<div id="navbar__divider"></div>
+		<div id="replace-content"></div>
+		<!-- !!!!!!!! board 색깔 수정 필요 !!!!!!!!!! -->
+	</section>
+	<hr>
+
+	<!-- footer -->
+	<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>

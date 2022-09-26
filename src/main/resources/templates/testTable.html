@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<td class="test" th:each="test:${testList}" th:text="${test.testName}" th:value="${test.testNo}" onclick="select(this);">
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

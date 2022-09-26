@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clever</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/main/header.css" />
+<link rel="stylesheet" href="/css/mypage/mypage-setting.css">
+<link rel="stylesheet" href="/css/main/footer.css" />
+<script src="/js/script.js"></script>
+<script src="https://kit.fontawesome.com/267f657aa0.js"
+	crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+	var marker;
+	var item;
+	//마커 표시
+	function indicator(e) {
+		marker.style.left = e.offsetLeft + "px";
+		marker.style.width = e.offsetWidth + "px";
+	}
+	
+	//버튼 활성화
+	function active(event) {
+		item.removeClass('active');
+		indicator(event);
+		$(event).addClass('active');
+	}
+	
+	function settingCategoryBtn(event, category) {
+    	active(event);
+        $.ajax({
+          url: '/mypage/setting-' + category,
+          type: 'POST',
+          success: function (data) {
+            $('#replace-content').html(data);
+          },
+        });
+      }
+	
+    // default: 프로필
+    $(document).ready(function () {
+    	marker = document.querySelector(".marker");
+		item = $('.settings__list p');
+		
+        $.ajax({
+          url: '/mypage/setting-profile',
+          type: 'POST',
+          success: function (data) {
+            $('#replace-content').html(data);
+          },
+        });
+        settingCategoryBtn(item[0], 'profile');
+    });
+
+    </script>
+</head>
+<body>
+	<!-- header -->
+	<div th:replace="layout/header :: header"></div>
+	<hr>
+
+	<!-- mypage settings -->
+	<section id="settings">
+		<h1 id="settings__title">설정</h1>
+		<!-- settings list -->
+		<nav class="settings__list">
+			<!-- tab navigation -->
+			<p onclick="settingCategoryBtn(this, 'profile')">프로필</p>
+			<p onclick="settingCategoryBtn(this, 'account')">계정</p>
+			<div class="marker" target="_blank"></div>
+		</nav>
+		<div id="navbar__divider"></div>
+		<div id="replace-content"></div>
+
+	</section>
+	<script>
+    </script>
+
+	<!-- footer -->
+	<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>

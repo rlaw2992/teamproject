@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>my-reply</title>
+<link rel="stylesheet" href="style.css" />
+<style type="text/css">
+* {
+	cursor: default;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+tr:nth-child(2) {
+	border-bottom: 0.1px solid #e5e5e5;
+}
+
+th, td {
+	padding: 10px;
+}
+</style>
+</head>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+	integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<body>
+	<!-- <h1 id="ranked__title">내 댓글</h1> -->
+	<table>
+		<tr>
+			<th>시험 이름</th>
+			<th>회차 이름</th>
+			<th>문제 번호</th>
+			<th>댓글 내용</th>
+			<th>등록 시간</th>
+		</tr>
+		<tr></tr>
+		<tr th:each="reply:${replyList}">
+			<td th:text="${reply.TEST_NAME}"></td>
+			<td th:text="${reply.ROUND_NAME}"></td>
+			<td><a th:href="${'/quest/' + reply.QUEST_NO}"
+				th:text=${reply.QUEST_SEQ}></a></td>
+			<td th:text="${reply.CONTENT}"></td>
+			<td th:text="${reply.REG_TIME}"></td>
+		</tr>
+	</table>
+</body>
+</html>

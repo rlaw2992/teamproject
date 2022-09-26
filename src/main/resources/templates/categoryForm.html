@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/popup.css" />
+<style type="text/css">
+	h1,.container{
+		margin: 5%;
+	}
+	
+	#categoryList{
+		width:60%;
+	}
+	
+	#categoryButton{
+		width: 30%;
+	}
+	
+	.container>div{		
+		float: left;		
+		text-align: center;
+	}
+	
+	li{
+		list-style: none;
+	}
+	
+	table{
+		width:100%; 
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+</style>
+<script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	var categoryNo;
+	var categoryName;
+	
+	function select(td){
+		var td = $(td);
+		var no = td.attr('value');
+		var name = td.html();
+		
+		categoryNo.val(no);
+		categoryName.html(name);
+		
+		$('#categoryInfo').attr('hidden',false);
+		
+		$.ajax({
+			url:'/test/list',
+			type:'post',
+			data:{categoryNo:no},
+			success:function(data){
+				alert(data)
+				$.ajax({
+					url:'/test',
+					type:'post',
+					data:{param:JSON.stringify(data)},
+					sucess:function(data){
+						alert(data)
+						$('#testList').html(data);
+					},
+					error:function(){
+						alert('error')
+					}
+				})				
+			}
+		})
+	}
+	
+	function cancel(){
+		$('#newCategory').val('');
+		$('.white').attr('hidden', true);
+	}
+	
+	function saveCategory(){
+		var categoryName = $('#newCategory').val();
+		
+		alert(categoryName)
+		$.ajax({
+			url:'/category/insert',
+			type:'post',
+			data :{categoryName:categoryName},
+			success:function(){
+				alert('성공');
+			},
+			error:function(){
+				alert('실패');
+			}
+		})
+	}
+
+	function popup(id){
+		$('#' + id).attr('hidden',false);
+	}
+
+	function show(){
+		$.ajax({
+			url:'/category/table',
+			type:'post',
+			success:function(data){
+				var categoryList = $('#categoryList');
+				
+				categoryList.html(data);
+			},
+			error:function(){
+				alert('카테고리 목록 불러오기 실패');
+			}
+		})
+	}
+	
+	$(document).ready(function(){
+		show();
+		
+		categoryNo = $('#categoryNo');
+		categoryName = $('#categoryName');
+	})
+	
+</script>
+</head>
+<body>
+	<h1 style="text-align: center;">카테고리 관리</h1>
+	
+	<div id="categoryManage" class="white" hidden="true">
+		<div class="window">
+			<input type="text" id="newCategory" class="input" placeholder="카테고리 이름">
+			<div class="buttonArea">
+				<button class="button" onclick="saveCategory();">저장</button>
+				<button class="button" onclick="cancel();">취소</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="categoryInfo" class="white" hidden="true">
+		<div class="window">
+			<input type="hidden" id="categoryNo">			 
+			<div class="label">
+				<label id="categoryName">카테고리 이름</label>
+			</div>
+			<div id="testList">
+			</div>			
+			<div class="buttonArea">
+				<button class="button" onclick="saveTest();">추가</button>
+				<button class="button" onclick="cancel();">취소</button>
+			</div>			
+		</div>
+	</div>
+	
+	<div class="container">
+		<div id="categoryList">
+		</div>
+		<div id="categoryButton">
+			<ul>
+				<li>
+					<button onclick="popup('categoryManage');">카테고리 추가</button>
+				</li>
+			</ul>
+		</div>
+	</div>		
+</body>
+</html>
